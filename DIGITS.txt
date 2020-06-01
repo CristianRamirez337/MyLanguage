@@ -1,0 +1,101 @@
+program:
+    var A, divInt : int
+    var divFloat, aux: float
+
+    begin:
+
+    print("Introduzca valor de A")
+    input(A)
+
+    divInt = A / 10
+    divFloat = A / 10.0
+
+    while divInt > 0:
+        aux = divFloat - divInt
+        divFloat = divFloat - aux
+        aux = aux * 10
+
+         if aux > 8.0:
+            print("NUEVE")
+        else:
+            if aux > 7.0:
+                print("OCHO")
+            else:
+                if aux > 6.0:
+                    print("SIETE")
+                else:
+                    if aux > 5.0:
+                        print("SEIS")
+                    else:
+                        if aux > 4.0:
+                            print("CINCO")
+                        else:
+                            if aux > 3.0:
+                                print("CUATRO")
+                            else:
+                                if aux > 2.0:
+                                    print("TRES")
+                                else:
+                                    if aux > 1.0:
+                                        print("DOS")
+                                    else:
+                                        if aux > 0.0:
+                                            print("UNO")
+                                        else:
+                                            print("CERO")
+                                        endif
+                                    endif
+                                endif
+                            endif
+                        endif
+                    endif
+                endif
+            endif
+        endif
+
+
+        divInt = divInt / 10
+        divFloat = divFloat / 10.0
+    endw
+
+    aux = divFloat - divInt
+    aux = aux * 10
+
+    if aux > 8.0:
+        print("NUEVE")
+    else:
+        if aux > 7.0:
+            print("OCHO")
+        else:
+            if aux > 6.0:
+                print("SIETE")
+            else:
+                if aux > 5.0:
+                    print("SEIS")
+                else:
+                    if aux > 4.0:
+                        print("CINCO")
+                    else:
+                        if aux > 3.0:
+                            print("CUATRO")
+                        else:
+                            if aux > 2.0:
+                                print("TRES")
+                            else:
+                                if aux > 1.0:
+                                    print("DOS")
+                                else:
+                                    if aux > 0.0:
+                                        print("UNO")
+                                    else:
+                                        print("CERO")
+                                    endif
+                                endif
+                            endif
+                        endif
+                    endif
+                endif
+            endif
+        endif
+    endif
+end

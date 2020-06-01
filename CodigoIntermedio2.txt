@@ -1,0 +1,34 @@
+program:
+    var W, X, Z, B, Y: int
+    var a1: float
+
+    procedure sumax:
+        begin:
+         X = Y + 10
+        if X == 20:
+           Y = 5
+        endif
+    endp
+
+    procedure sumax2:
+        begin:
+         X = Y + 10
+    endp
+
+    begin:
+    Y = 10.98
+    B = 1 + Y
+    Z = 0
+    while (B > 5):
+        Z = Z + 21
+        print("Aqui hay un while seniores")
+        B = B -2
+    endw
+
+    gosub sumax
+    print("Ingrese un nuevo valor de a1")
+    input(a1)
+    X = a1 + 4
+    W = 123 * 1
+
+end

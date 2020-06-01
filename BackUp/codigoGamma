@@ -1,0 +1,545 @@
+import ply.lex as lex
+import ply.yacc as yacc
+import sys
+from collections import deque
+
+symbols = []
+sym_type = []
+count = 0
+hopsCounter = 0
+ifQuadrules = []
+itsAnIf = 0
+itsALoop = 0
+loopQuadrules = []
+hopsCounterLoop = 0
+
+
+tokens = [
+	'ID', 'COLON', 'COMMA', 'DOT',
+	'ASSIGN', 'DIVIDE', 'TIMES', 'MINUS', 'PLUS',
+	'LT', 'GT', 'NE', 'NUMBER', 'PARL', 'PARR',
+	'COMMENT', 'newline', 'STRING', 'EQ', 'SQBL', 'SQBR'
+]
+
+reserved = ['PROGRAM', 'END', 'VAR', 'PROCEDURE',
+	'BEGIN', 'PRINT', 'INPUT', 'IF', 'ELSE', 'ENDIF',
+	'WHILE', 'ENDW', 'DO', 'ENDDO', 'FOR', 'ENDF',
+	'GOSUB', 'ENDP', 'FLOAT', 'INT', 'ARRAY', 'MATRIX',
+	'CUBE', 'IN', 'DWHILE', 'AND', 'OR'
+]
+
+tokens = tokens + reserved
+
+t_ignore = r' \t'
+#t_newline = r'\n'
+#t_ignore = '\t'
+t_COLON = r':'
+t_COMMA= r','
+t_DOT = r'\.'
+t_ASSIGN = r'='
+t_DIVIDE = r'/'
+t_TIMES = r'\*'
+t_MINUS = r'\-'
+t_PLUS = r'\+'
+t_LT = r'<'
+t_GT = r'>'
+t_NE = r'<>'
+t_PARL = r'\('
+t_PARR = r'\)'
+t_EQ = r'={2}?'
+t_SQBL = r'\['
+t_SQBR = r'\]'
+
+def t_ID(t):
+	r'[a-zA-Z][a-zA-Z0-9_]*'
+	if t.value.upper() in reserved:
+		t.value = t.value.upper()
+		t.type = t.value
+	return t
+
+def t_COMMENT(t):
+	r'\#.*'
+	pass
+
+def t_NUMBER(t):
+	r'\d+'
+	t.value = int(t.value)
+	return t
+
+def t_newline(t):
+	r'\n+'
+	t.lexer.lineno += len(t.value)
+	#pass
+
+def t_STRING(t):
+	r'["][a-zA-Z 0-9:!@#$%^&*()-+=/?<>,]+["]'
+	return t
+
+def t_error(t):
+	print("Illegal character '%s'" % t.value[0])
+	t.lexer.skip(1)
+
+lexer = lex.lex()
+
+#   ******************** YACC ***************
+
+precedence = (
+	('right', 'ASSIGN'),
+	('left', 'NE'),
+	('left', 'LT', 'GT'),
+	('left', 'PLUS', 'MINUS'),
+	('left', 'TIMES', 'DIVIDE'),
+	('right', 'PARL'),
+	('left', 'PARR')
+)
+# GENERAL PROGRAM
+def p_program(p):
+	''' program : PROGRAM COLON V P B END
+	| PROGRAM COLON empty END'''
+
+
+#   ******************** YACC ***************
+
+precedence = (
+    ('right', 'ASSIGN'),
+    ('left', 'NE'),
+    ('left', 'LT', 'GT'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'TIMES', 'DIVIDE'),
+    ('right', 'PARL'),
+    ('left', 'PARR')
+)
+
+
+# GENERAL PROGRAM
+def p_program(p):
+    ''' program : PROGRAM COLON V P B END
+	| PROGRAM COLON empty END'''
+
+
+
+# VARIABLES
+def p_V(p):
+    ''' V : V VAR VM COLON TIPO
+	| empty'''
+
+def p_VM(p):
+    ''' VM : ID VM2'''
+    symbols.append(p[1])
+
+def p_VM2(p):
+    ''' VM2 : COMMA ID VM2'''
+    symbols.append(p[2])
+
+def p_VM2_empty(p):
+    '''VM2 : empty'''
+
+
+# VARIABLE TYPE
+def p_TIPO(p):
+    ''' TIPO : FLOAT
+	| INT
+	| ARRAY
+	| MATRIX
+	| CUBE'''
+    symbols.append(p[1])
+
+
+# PROCEDURES
+def p_P(p):
+    ''' P : P PROCEDURE ID COLON B ENDP
+	| empty'''
+
+
+# def p_P(p):
+# 	''' P : PROCEDURE ID COLON B ENDP '''
+
+# MAIN PROGRAM o INTERMADIATE CODE
+def p_B(p):
+    ''' B : BEGIN COLON ST '''
+
+
+def p_ST(p):
+    ''' ST : S ST
+	| empty'''
+
+
+# STATEMENTS
+def p_S(p):
+    ''' S : PRINT PARL SID PARR
+	| INPUT PARL IID PARR
+	| IF CONDITION COLON ST ENDIF
+	| IF CONDITION COLON ST ELSE COLON ST ENDIF
+	| FOR ID IN ID COLON ST ENDF
+	| VMC ASSIGN UPDATE
+	| WHILE CONDITION COLON ST ENDW
+	| DO COLON ST DWHILE COLON CONDITION ENDDO
+	| GOSUB ID
+	'''
+
+
+# print management
+def p_SID(p):
+    '''SID : STRING SID2
+	| VMC SID2'''
+
+
+def p_SID2(p):
+    '''SID2 : PLUS VMC SID2
+	| PLUS STRING SID2
+	| empty'''
+
+
+# input management
+def p_IID(p):
+    '''IID : VMC IID2'''
+
+
+def p_IID2(p):
+    '''IID2 : COMMA VMC  IID2
+	| empty'''
+
+
+# if management
+def p_CONDITION(p):
+    '''CONDITION : CMP COMPARATOR CMP'''
+
+
+def p_CMP(p):
+    '''CMP : NUMBER
+	| ID'''
+
+
+def p_COMPARATOR(p):
+    '''COMPARATOR : NE
+	| GT
+	| LT
+	| EQ'''
+
+
+# ASSIGN management
+def p_VMC(p):
+    '''VMC : ID
+	| ID SQBL CMP SQBR SQBL CMP SQBR
+	| ID SQBL CMP SQBR SQBL CMP SQBR SQBL CMP SQBR'''
+
+
+def p_UPDATE(p):
+    '''UPDATE : VMC OPERATOR UPDATE
+	| NUMBER OPERATOR UPDATE
+	| VMC
+	| NUMBER'''
+
+
+def p_OPERATOR(p):
+    '''OPERATOR : PLUS
+	| MINUS
+	| TIMES
+	| DIVIDE'''
+
+
+# def p_Sempty(p):
+# 	''' S : empty '''
+
+# EMPTY VALUES
+def p_empty(p):
+    ''' empty :	'''
+    pass
+
+
+# THROWING ERROR
+def p_error(p):
+    print("\tSyntax error in line " + str(p.lineno))
+
+
+parser = yacc.yacc()
+
+f = open("fiborecur.txt", "r")
+parser.parse(f.read())
+
+print(symbols)
+# VARIABLES
+def p_V(p):
+	''' V : V VAR VM COLON TIPO
+	| empty'''
+
+
+def p_VM(p):
+	''' VM : ID VM2'''
+	symbols.append(p[1])
+	global count
+	count += 1
+
+def p_VM2(p):
+	''' VM2 : COMMA ID VM2'''
+	symbols.append(p[2])
+	global count
+	count += 1
+
+def p_VM2_empty(p):
+	'''VM2 : empty'''
+
+# VARIABLE TYPE
+def p_TIPO(p):
+	''' TIPO : FLOAT
+	| INT
+	| ARRAY
+	| MATRIX
+	| CUBE'''
+	global count
+	for i in range(count):
+		sym_type.append(p[1])
+	count = 0
+
+#PROCEDURES
+def p_P(p):
+	''' P : P PROCEDURE ID COLON B ENDP'''
+	symbols.append(p[3])
+	sym_type.append("PROCEDURE")
+
+def p_P_empty(p):
+	''' P : empty'''
+
+# MAIN PROGRAM o INTERMADIATE CODE
+def p_B(p):
+	''' B : BEGIN COLON ST '''
+
+def p_ST(p):
+	''' ST : S ST
+	| empty'''
+
+# STATEMENTS
+def p_S(p):
+	''' S : PRINT PARL SID PARR
+	| INPUT PARL IID PARR
+	| IF AUXIF CONDITION AUXCOLON ST IFNOT ENDIF
+	| FOR ID IN ID COLON ST ENDF
+	| VMC ASSIGN CONDITION
+	| WHILE AUXWHILE CONDITION AUXCOLON ST ENDW
+	| DO COLON ST DWHILE COLON CONDITION ENDDO
+	| GOSUB ID
+	'''
+
+# print management
+def p_SID(p):
+	'''SID : STRING SID2
+	| VMC SID2'''
+def p_SID2(p):
+	'''SID2 : PLUS VMC SID2
+	| PLUS STRING SID2
+	| empty'''
+
+# input management
+def p_IID(p):
+	'''IID : VMC IID2'''
+def p_IID2(p):
+	'''IID2 : COMMA VMC  IID2
+	| empty'''
+
+# ******************************** if management ********************************
+def p_AUXCOLON(p):
+	'''AUXCOLON : COLON'''
+	# Auxiliar to add the GO TO FALSE after the condition or conditions
+	if itsAnIf == 1:
+		ifQuadrules.append("GoToF " + str(ifQuadrules[-1][-1]) + " - " + str(hopsCounter))
+	elif itsALoop == 1:
+		loopQuadrules.append("GoToF " + str(loopQuadrules[-1][-1]) + " - " + str(hopsCounterLoop))
+
+def p_AUXIF(p):
+	'''AUXIF : empty'''
+	# Auxiliar to set 1 to the flag to input in the if stack
+	global itsAnIf
+	itsAnIf = 1
+
+def p_IFNOT(p):
+	''' IFNOT : ELSE COLON AUXQ ST AUXEND'''
+	# Auxiliar to set the if flag to 0 after the id end
+	global itsAnIf
+	itsAnIf = 0
+def p_IFNOT_empty(p):
+	''' IFNOT : empty'''
+	# Auxiliar to set if flag to 0 if there is not else
+	global itsAnIf
+	itsAnIf = 0
+
+def p_AUXQ(p):
+	'''AUXQ : empty'''
+	# Aux to add the Go to after the true statements to not enter in the false ones
+	global hopsCounter
+	hopsCounter += 1
+	ifQuadrules.append("GoTo ")
+	aux = ifQuadrules[1].find(' - ')
+	ifQuadrules[1] = ifQuadrules[1][0:aux + 1] + str(hopsCounter)
+
+def p_AUXEND(p):
+	'''AUXEND : empty'''
+	aux = ifQuadrules.index('GoTo ')
+	ifQuadrules[aux] = 'GoTo ' + str(hopsCounter)
+
+
+
+def p_CONDITION(p):
+	'''CONDITION : UPDATE'''
+	global hopsCounter, hopsCounterLoop
+	if itsAnIf == 1:
+		hopsCounter += 1
+	elif itsALoop == 1:
+		hopsCounterLoop += 1
+def p_CONDITION2(p):
+	'''CONDITION : UPDATE NE UPDATE
+	| UPDATE GT UPDATE
+	| UPDATE LT UPDATE
+	| UPDATE EQ UPDATE'''
+	global hopsCounter
+	if itsAnIf == 1:
+		genera_cuadruplo(p[2])
+		hopsCounter+=1
+	elif itsALoop == 1:
+		genera_cuadruplo(p[2])
+
+
+
+
+
+def p_CMP(p):
+	'''CMP : NUMBER
+	| ID'''
+
+
+# ASSIGN management
+def p_VMC(p):
+	'''VMC : ID
+	| ID SQBL CMP SQBR SQBL CMP SQBR
+	| ID SQBL CMP SQBR SQBL CMP SQBR SQBL CMP SQBR'''
+# Definicion de cuadruplos
+'''
+	E->E+-T; E->T; T->T*/F; T->F; F->id; F->(E)
+'''
+operandsStack = deque() #Pila de operandos
+executionQueue = [] # Espacio para almacenar cuadruplos
+availTemporales = deque(['T1']) # Avail de temporales
+availAux = []
+typeStack = deque()
+iAvail = 2 # execution index
+
+# Funcion para generar cuadruplo
+def existingAvail(value):
+	try:
+		availAux.index(value)
+		availTemporales.append(value)
+		availAux.remove(value)
+
+	except:
+		pass
+def translateType(x, y, operand):
+	if operand == '+' or operand == '-' or operand == '*':
+		if x == y:
+			return x
+def genera_cuadruplo(operator):
+	global iAvail
+	executionQueue.append(operator)
+	# Operands
+	auxOperand = operandsStack.pop()
+	executionQueue.append(operandsStack.pop())
+
+	existingAvail(executionQueue[-1]) #Operand equal to a temporal
+
+	executionQueue.append(auxOperand)
+
+	existingAvail(executionQueue[-1]) #Operand equal to a temporal
+
+	operandsStack.append(availTemporales.popleft())
+	executionQueue.append(operandsStack[-1])
+	availAux.append(operandsStack[-1])
+	availTemporales.append('T' + str(iAvail)) #New temporal
+	iAvail+=1
+
+	print(executionQueue)
+	if itsAnIf == 1:
+		global hopsCounter
+		ifQuadrules.append(executionQueue[:])
+		hopsCounter += 1
+	elif itsALoop == 1:
+		global hopsCounterLoop
+		loopQuadrules.append(executionQueue[:])
+		hopsCounterLoop += 1
+	executionQueue.clear()
+
+def p_update(p):
+	'''UPDATE : T '''
+def p_update2(p):
+	'''UPDATE : UPDATE PLUS T
+	| UPDATE MINUS T
+	| UPDATE OR T'''
+	genera_cuadruplo(p[2])
+
+def p_T(p):
+	'''T : F'''
+def p_T2(p):
+	'''T : T TIMES F
+	| T DIVIDE F
+	| T AND F
+	'''
+	genera_cuadruplo(p[2])
+
+def p_F(p):
+	'''F : ID'''
+	try:
+		operandsStack.append(symbols.index(p[1]))
+		operandsStack[-1] = '-' + str(operandsStack[-1])
+		typeStack.append(sym_type[symbols.index(p[1])])
+	except:
+		print("Variable not declared yet")
+def p_F_NUMBER(p):
+	'''F : NUMBER'''
+	operandsStack.append(p[1])
+def p_FtoE(p):
+	'''F : PARL CONDITION PARR'''
+
+
+# def p_UPDATE(p):
+# 	'''UPDATE : VMC UPDATE
+# 	| NUMBER OPERATOR UPDATE
+# 	| VMC
+# 	| NUMBER'''
+# def p_OPERATOR(p):
+# 	'''OPERATOR : PLUS
+# 	| MINUS
+# 	| TIMES
+# 	| DIVIDE'''
+
+# def p_Sempty(p):
+# 	''' S : empty '''
+
+# EMPTY VALUES
+
+# ********************************* WHILE MANAGEMENT ***********************************
+def p_AUXWHILE(p):
+	'''AUXWHILE : empty'''
+	global itsALoop
+	itsALoop = 1
+
+
+def p_empty(p):
+	''' empty :	'''
+	pass
+
+# THROWING ERROR
+def p_error(p):
+	print("\tSyntax error in line " + str(p.lineno))
+
+parser = yacc.yacc()
+f = open("CodigoIntermedio.txt", "r")
+parser.parse(f.read())
+
+# for i in range(len(symbols)):
+# 	print(str(sym_type[i]) + "\t\t" + str(symbols[i]))
+print("Tabla de simbolos" + str(symbols))
+#print(sym_type)
+#print(typeStack)
+print("Cuadruplos del if:")
+print(ifQuadrules)int("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+
+
+lexer = lex.lex()

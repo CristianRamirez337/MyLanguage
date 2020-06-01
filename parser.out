@@ -1,0 +1,2091 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    COMMENT
+    DOT
+    SQBL
+    SQBR
+    newline
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> PROGRAM COLON V MAIN P B END
+Rule 2     MAIN -> empty
+Rule 3     V -> V VAR VM COLON TIPO
+Rule 4     V -> empty
+Rule 5     VM -> ID VM2
+Rule 6     VM2 -> COMMA ID VM2
+Rule 7     VM2 -> empty
+Rule 8     TIPO -> FLOAT
+Rule 9     TIPO -> INT
+Rule 10    TIPO -> ARRAY
+Rule 11    TIPO -> MATRIX
+Rule 12    TIPO -> CUBE
+Rule 13    TIPO -> BOOL
+Rule 14    P -> P AUXPOSP PROCEDURE ID COLON B ENDP
+Rule 15    P -> empty
+Rule 16    AUXPOSP -> empty
+Rule 17    B -> BEGIN COLON ST
+Rule 18    ST -> S ST
+Rule 19    ST -> empty
+Rule 20    S -> FOR ID IN ID COLON ST ENDF
+Rule 21    S -> DO COLON ST DWHILE COLON CONDITION ENDDO
+Rule 22    S -> GOSUB ID
+Rule 23    S -> PRINT PARL SID PARR
+Rule 24    SID -> SID PLUS SID_T
+Rule 25    SID -> SID_T
+Rule 26    SID_T -> STRING
+Rule 27    SID_T -> ID
+Rule 28    SID -> empty
+Rule 29    CMP -> ID
+Rule 30    S -> INPUT PARL ID PARR
+Rule 31    S -> CMP ASSIGN UPDATE
+Rule 32    UPDATE -> T
+Rule 33    UPDATE -> UPDATE PLUS T
+Rule 34    UPDATE -> UPDATE MINUS T
+Rule 35    UPDATE -> UPDATE OR T
+Rule 36    T -> F
+Rule 37    T -> T TIMES F
+Rule 38    T -> T DIVIDE F
+Rule 39    T -> T AND F
+Rule 40    F -> ID
+Rule 41    F -> NUMBER
+Rule 42    F -> PARL CONDITION PARR
+Rule 43    S -> IF CONDITION AUXCOLON ST ENDIF
+Rule 44    S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+Rule 45    AUXQ -> empty
+Rule 46    AUXENDIF -> empty
+Rule 47    S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+Rule 48    AUXWHILE -> empty
+Rule 49    AUXENDWHILE -> empty
+Rule 50    CONDITION -> UPDATE
+Rule 51    CONDITION -> UPDATE NE UPDATE
+Rule 52    CONDITION -> UPDATE GT UPDATE
+Rule 53    CONDITION -> UPDATE LT UPDATE
+Rule 54    CONDITION -> UPDATE EQ UPDATE
+Rule 55    AUXCOLON -> COLON
+Rule 56    empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 39
+ARRAY                : 10
+ASSIGN               : 31
+BEGIN                : 17
+BOOL                 : 13
+COLON                : 1 3 14 17 20 21 21 44 55
+COMMA                : 6
+COMMENT              : 
+CUBE                 : 12
+DIVIDE               : 38
+DO                   : 21
+DOT                  : 
+DWHILE               : 21
+ELSE                 : 44
+END                  : 1
+ENDDO                : 21
+ENDF                 : 20
+ENDIF                : 43 44
+ENDP                 : 14
+ENDW                 : 47
+EQ                   : 54
+FLOAT                : 8
+FOR                  : 20
+GOSUB                : 22
+GT                   : 52
+ID                   : 5 6 14 20 20 22 27 29 30 40
+IF                   : 43 44
+IN                   : 20
+INPUT                : 30
+INT                  : 9
+LT                   : 53
+MATRIX               : 11
+MINUS                : 34
+NE                   : 51
+NUMBER               : 41
+OR                   : 35
+PARL                 : 23 30 42
+PARR                 : 23 30 42
+PLUS                 : 24 33
+PRINT                : 23
+PROCEDURE            : 14
+PROGRAM              : 1
+SQBL                 : 
+SQBR                 : 
+STRING               : 26
+TIMES                : 37
+VAR                  : 3
+WHILE                : 47
+error                : 
+newline              : 
+
+Nonterminals, with rules where they appear
+
+AUXCOLON             : 43 44 47
+AUXENDIF             : 44
+AUXENDWHILE          : 47
+AUXPOSP              : 14
+AUXQ                 : 44
+AUXWHILE             : 47
+B                    : 1 14
+CMP                  : 31
+CONDITION            : 21 42 43 44 47
+F                    : 36 37 38 39
+MAIN                 : 1
+P                    : 1 14
+S                    : 18
+SID                  : 23 24
+SID_T                : 24 25
+ST                   : 17 18 20 21 43 44 44 47
+T                    : 32 33 34 35 37 38 39
+TIPO                 : 3
+UPDATE               : 31 33 34 35 50 51 51 52 52 53 53 54 54
+V                    : 1 3
+VM                   : 3
+VM2                  : 5 6
+empty                : 2 4 7 15 16 19 28 45 46 48 49
+program              : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . PROGRAM COLON V MAIN P B END
+
+    PROGRAM         shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> PROGRAM . COLON V MAIN P B END
+
+    COLON           shift and go to state 3
+
+
+state 3
+
+    (1) program -> PROGRAM COLON . V MAIN P B END
+    (3) V -> . V VAR VM COLON TIPO
+    (4) V -> . empty
+    (56) empty -> .
+
+    VAR             reduce using rule 56 (empty -> .)
+    BEGIN           reduce using rule 56 (empty -> .)
+    PROCEDURE       reduce using rule 56 (empty -> .)
+
+    V                              shift and go to state 4
+    empty                          shift and go to state 5
+
+state 4
+
+    (1) program -> PROGRAM COLON V . MAIN P B END
+    (3) V -> V . VAR VM COLON TIPO
+    (2) MAIN -> . empty
+    (56) empty -> .
+
+    VAR             shift and go to state 7
+    BEGIN           reduce using rule 56 (empty -> .)
+    PROCEDURE       reduce using rule 56 (empty -> .)
+
+    MAIN                           shift and go to state 6
+    empty                          shift and go to state 8
+
+state 5
+
+    (4) V -> empty .
+
+    VAR             reduce using rule 4 (V -> empty .)
+    BEGIN           reduce using rule 4 (V -> empty .)
+    PROCEDURE       reduce using rule 4 (V -> empty .)
+
+
+state 6
+
+    (1) program -> PROGRAM COLON V MAIN . P B END
+    (14) P -> . P AUXPOSP PROCEDURE ID COLON B ENDP
+    (15) P -> . empty
+    (56) empty -> .
+
+    BEGIN           reduce using rule 56 (empty -> .)
+    PROCEDURE       reduce using rule 56 (empty -> .)
+
+    P                              shift and go to state 9
+    empty                          shift and go to state 10
+
+state 7
+
+    (3) V -> V VAR . VM COLON TIPO
+    (5) VM -> . ID VM2
+
+    ID              shift and go to state 12
+
+    VM                             shift and go to state 11
+
+state 8
+
+    (2) MAIN -> empty .
+
+    BEGIN           reduce using rule 2 (MAIN -> empty .)
+    PROCEDURE       reduce using rule 2 (MAIN -> empty .)
+
+
+state 9
+
+    (1) program -> PROGRAM COLON V MAIN P . B END
+    (14) P -> P . AUXPOSP PROCEDURE ID COLON B ENDP
+    (17) B -> . BEGIN COLON ST
+    (16) AUXPOSP -> . empty
+    (56) empty -> .
+
+    BEGIN           shift and go to state 15
+    PROCEDURE       reduce using rule 56 (empty -> .)
+
+    B                              shift and go to state 13
+    AUXPOSP                        shift and go to state 14
+    empty                          shift and go to state 16
+
+state 10
+
+    (15) P -> empty .
+
+    BEGIN           reduce using rule 15 (P -> empty .)
+    PROCEDURE       reduce using rule 15 (P -> empty .)
+
+
+state 11
+
+    (3) V -> V VAR VM . COLON TIPO
+
+    COLON           shift and go to state 17
+
+
+state 12
+
+    (5) VM -> ID . VM2
+    (6) VM2 -> . COMMA ID VM2
+    (7) VM2 -> . empty
+    (56) empty -> .
+
+    COMMA           shift and go to state 19
+    COLON           reduce using rule 56 (empty -> .)
+
+    VM2                            shift and go to state 18
+    empty                          shift and go to state 20
+
+state 13
+
+    (1) program -> PROGRAM COLON V MAIN P B . END
+
+    END             shift and go to state 21
+
+
+state 14
+
+    (14) P -> P AUXPOSP . PROCEDURE ID COLON B ENDP
+
+    PROCEDURE       shift and go to state 22
+
+
+state 15
+
+    (17) B -> BEGIN . COLON ST
+
+    COLON           shift and go to state 23
+
+
+state 16
+
+    (16) AUXPOSP -> empty .
+
+    PROCEDURE       reduce using rule 16 (AUXPOSP -> empty .)
+
+
+state 17
+
+    (3) V -> V VAR VM COLON . TIPO
+    (8) TIPO -> . FLOAT
+    (9) TIPO -> . INT
+    (10) TIPO -> . ARRAY
+    (11) TIPO -> . MATRIX
+    (12) TIPO -> . CUBE
+    (13) TIPO -> . BOOL
+
+    FLOAT           shift and go to state 25
+    INT             shift and go to state 26
+    ARRAY           shift and go to state 27
+    MATRIX          shift and go to state 28
+    CUBE            shift and go to state 29
+    BOOL            shift and go to state 30
+
+    TIPO                           shift and go to state 24
+
+state 18
+
+    (5) VM -> ID VM2 .
+
+    COLON           reduce using rule 5 (VM -> ID VM2 .)
+
+
+state 19
+
+    (6) VM2 -> COMMA . ID VM2
+
+    ID              shift and go to state 31
+
+
+state 20
+
+    (7) VM2 -> empty .
+
+    COLON           reduce using rule 7 (VM2 -> empty .)
+
+
+state 21
+
+    (1) program -> PROGRAM COLON V MAIN P B END .
+
+    $end            reduce using rule 1 (program -> PROGRAM COLON V MAIN P B END .)
+
+
+state 22
+
+    (14) P -> P AUXPOSP PROCEDURE . ID COLON B ENDP
+
+    ID              shift and go to state 32
+
+
+state 23
+
+    (17) B -> BEGIN COLON . ST
+    (18) ST -> . S ST
+    (19) ST -> . empty
+    (20) S -> . FOR ID IN ID COLON ST ENDF
+    (21) S -> . DO COLON ST DWHILE COLON CONDITION ENDDO
+    (22) S -> . GOSUB ID
+    (23) S -> . PRINT PARL SID PARR
+    (30) S -> . INPUT PARL ID PARR
+    (31) S -> . CMP ASSIGN UPDATE
+    (43) S -> . IF CONDITION AUXCOLON ST ENDIF
+    (44) S -> . IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (47) S -> . WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (56) empty -> .
+    (29) CMP -> . ID
+
+    FOR             shift and go to state 36
+    DO              shift and go to state 38
+    GOSUB           shift and go to state 39
+    PRINT           shift and go to state 40
+    INPUT           shift and go to state 41
+    IF              shift and go to state 43
+    WHILE           shift and go to state 44
+    END             reduce using rule 56 (empty -> .)
+    ENDP            reduce using rule 56 (empty -> .)
+    ID              shift and go to state 37
+
+    ST                             shift and go to state 33
+    S                              shift and go to state 34
+    empty                          shift and go to state 35
+    CMP                            shift and go to state 42
+
+state 24
+
+    (3) V -> V VAR VM COLON TIPO .
+
+    VAR             reduce using rule 3 (V -> V VAR VM COLON TIPO .)
+    BEGIN           reduce using rule 3 (V -> V VAR VM COLON TIPO .)
+    PROCEDURE       reduce using rule 3 (V -> V VAR VM COLON TIPO .)
+
+
+state 25
+
+    (8) TIPO -> FLOAT .
+
+    VAR             reduce using rule 8 (TIPO -> FLOAT .)
+    BEGIN           reduce using rule 8 (TIPO -> FLOAT .)
+    PROCEDURE       reduce using rule 8 (TIPO -> FLOAT .)
+
+
+state 26
+
+    (9) TIPO -> INT .
+
+    VAR             reduce using rule 9 (TIPO -> INT .)
+    BEGIN           reduce using rule 9 (TIPO -> INT .)
+    PROCEDURE       reduce using rule 9 (TIPO -> INT .)
+
+
+state 27
+
+    (10) TIPO -> ARRAY .
+
+    VAR             reduce using rule 10 (TIPO -> ARRAY .)
+    BEGIN           reduce using rule 10 (TIPO -> ARRAY .)
+    PROCEDURE       reduce using rule 10 (TIPO -> ARRAY .)
+
+
+state 28
+
+    (11) TIPO -> MATRIX .
+
+    VAR             reduce using rule 11 (TIPO -> MATRIX .)
+    BEGIN           reduce using rule 11 (TIPO -> MATRIX .)
+    PROCEDURE       reduce using rule 11 (TIPO -> MATRIX .)
+
+
+state 29
+
+    (12) TIPO -> CUBE .
+
+    VAR             reduce using rule 12 (TIPO -> CUBE .)
+    BEGIN           reduce using rule 12 (TIPO -> CUBE .)
+    PROCEDURE       reduce using rule 12 (TIPO -> CUBE .)
+
+
+state 30
+
+    (13) TIPO -> BOOL .
+
+    VAR             reduce using rule 13 (TIPO -> BOOL .)
+    BEGIN           reduce using rule 13 (TIPO -> BOOL .)
+    PROCEDURE       reduce using rule 13 (TIPO -> BOOL .)
+
+
+state 31
+
+    (6) VM2 -> COMMA ID . VM2
+    (6) VM2 -> . COMMA ID VM2
+    (7) VM2 -> . empty
+    (56) empty -> .
+
+    COMMA           shift and go to state 19
+    COLON           reduce using rule 56 (empty -> .)
+
+    VM2                            shift and go to state 45
+    empty                          shift and go to state 20
+
+state 32
+
+    (14) P -> P AUXPOSP PROCEDURE ID . COLON B ENDP
+
+    COLON           shift and go to state 46
+
+
+state 33
+
+    (17) B -> BEGIN COLON ST .
+
+    END             reduce using rule 17 (B -> BEGIN COLON ST .)
+    ENDP            reduce using rule 17 (B -> BEGIN COLON ST .)
+
+
+state 34
+
+    (18) ST -> S . ST
+    (18) ST -> . S ST
+    (19) ST -> . empty
+    (20) S -> . FOR ID IN ID COLON ST ENDF
+    (21) S -> . DO COLON ST DWHILE COLON CONDITION ENDDO
+    (22) S -> . GOSUB ID
+    (23) S -> . PRINT PARL SID PARR
+    (30) S -> . INPUT PARL ID PARR
+    (31) S -> . CMP ASSIGN UPDATE
+    (43) S -> . IF CONDITION AUXCOLON ST ENDIF
+    (44) S -> . IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (47) S -> . WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (56) empty -> .
+    (29) CMP -> . ID
+
+    FOR             shift and go to state 36
+    DO              shift and go to state 38
+    GOSUB           shift and go to state 39
+    PRINT           shift and go to state 40
+    INPUT           shift and go to state 41
+    IF              shift and go to state 43
+    WHILE           shift and go to state 44
+    END             reduce using rule 56 (empty -> .)
+    ENDP            reduce using rule 56 (empty -> .)
+    DWHILE          reduce using rule 56 (empty -> .)
+    ENDIF           reduce using rule 56 (empty -> .)
+    ELSE            reduce using rule 56 (empty -> .)
+    ENDW            reduce using rule 56 (empty -> .)
+    ENDF            reduce using rule 56 (empty -> .)
+    ID              shift and go to state 37
+
+    S                              shift and go to state 34
+    ST                             shift and go to state 47
+    empty                          shift and go to state 35
+    CMP                            shift and go to state 42
+
+state 35
+
+    (19) ST -> empty .
+
+    END             reduce using rule 19 (ST -> empty .)
+    ENDP            reduce using rule 19 (ST -> empty .)
+    DWHILE          reduce using rule 19 (ST -> empty .)
+    ENDIF           reduce using rule 19 (ST -> empty .)
+    ELSE            reduce using rule 19 (ST -> empty .)
+    ENDW            reduce using rule 19 (ST -> empty .)
+    ENDF            reduce using rule 19 (ST -> empty .)
+
+
+state 36
+
+    (20) S -> FOR . ID IN ID COLON ST ENDF
+
+    ID              shift and go to state 48
+
+
+state 37
+
+    (29) CMP -> ID .
+
+    ASSIGN          reduce using rule 29 (CMP -> ID .)
+
+
+state 38
+
+    (21) S -> DO . COLON ST DWHILE COLON CONDITION ENDDO
+
+    COLON           shift and go to state 49
+
+
+state 39
+
+    (22) S -> GOSUB . ID
+
+    ID              shift and go to state 50
+
+
+state 40
+
+    (23) S -> PRINT . PARL SID PARR
+
+    PARL            shift and go to state 51
+
+
+state 41
+
+    (30) S -> INPUT . PARL ID PARR
+
+    PARL            shift and go to state 52
+
+
+state 42
+
+    (31) S -> CMP . ASSIGN UPDATE
+
+    ASSIGN          shift and go to state 53
+
+
+state 43
+
+    (43) S -> IF . CONDITION AUXCOLON ST ENDIF
+    (44) S -> IF . CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (50) CONDITION -> . UPDATE
+    (51) CONDITION -> . UPDATE NE UPDATE
+    (52) CONDITION -> . UPDATE GT UPDATE
+    (53) CONDITION -> . UPDATE LT UPDATE
+    (54) CONDITION -> . UPDATE EQ UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    CONDITION                      shift and go to state 54
+    UPDATE                         shift and go to state 55
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 44
+
+    (47) S -> WHILE . AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (48) AUXWHILE -> . empty
+    (56) empty -> .
+
+    ID              reduce using rule 56 (empty -> .)
+    NUMBER          reduce using rule 56 (empty -> .)
+    PARL            reduce using rule 56 (empty -> .)
+
+    AUXWHILE                       shift and go to state 61
+    empty                          shift and go to state 62
+
+state 45
+
+    (6) VM2 -> COMMA ID VM2 .
+
+    COLON           reduce using rule 6 (VM2 -> COMMA ID VM2 .)
+
+
+state 46
+
+    (14) P -> P AUXPOSP PROCEDURE ID COLON . B ENDP
+    (17) B -> . BEGIN COLON ST
+
+    BEGIN           shift and go to state 15
+
+    B                              shift and go to state 63
+
+state 47
+
+    (18) ST -> S ST .
+
+    END             reduce using rule 18 (ST -> S ST .)
+    ENDP            reduce using rule 18 (ST -> S ST .)
+    DWHILE          reduce using rule 18 (ST -> S ST .)
+    ENDIF           reduce using rule 18 (ST -> S ST .)
+    ELSE            reduce using rule 18 (ST -> S ST .)
+    ENDW            reduce using rule 18 (ST -> S ST .)
+    ENDF            reduce using rule 18 (ST -> S ST .)
+
+
+state 48
+
+    (20) S -> FOR ID . IN ID COLON ST ENDF
+
+    IN              shift and go to state 64
+
+
+state 49
+
+    (21) S -> DO COLON . ST DWHILE COLON CONDITION ENDDO
+    (18) ST -> . S ST
+    (19) ST -> . empty
+    (20) S -> . FOR ID IN ID COLON ST ENDF
+    (21) S -> . DO COLON ST DWHILE COLON CONDITION ENDDO
+    (22) S -> . GOSUB ID
+    (23) S -> . PRINT PARL SID PARR
+    (30) S -> . INPUT PARL ID PARR
+    (31) S -> . CMP ASSIGN UPDATE
+    (43) S -> . IF CONDITION AUXCOLON ST ENDIF
+    (44) S -> . IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (47) S -> . WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (56) empty -> .
+    (29) CMP -> . ID
+
+    FOR             shift and go to state 36
+    DO              shift and go to state 38
+    GOSUB           shift and go to state 39
+    PRINT           shift and go to state 40
+    INPUT           shift and go to state 41
+    IF              shift and go to state 43
+    WHILE           shift and go to state 44
+    DWHILE          reduce using rule 56 (empty -> .)
+    ID              shift and go to state 37
+
+    ST                             shift and go to state 65
+    S                              shift and go to state 34
+    empty                          shift and go to state 35
+    CMP                            shift and go to state 42
+
+state 50
+
+    (22) S -> GOSUB ID .
+
+    FOR             reduce using rule 22 (S -> GOSUB ID .)
+    DO              reduce using rule 22 (S -> GOSUB ID .)
+    GOSUB           reduce using rule 22 (S -> GOSUB ID .)
+    PRINT           reduce using rule 22 (S -> GOSUB ID .)
+    INPUT           reduce using rule 22 (S -> GOSUB ID .)
+    IF              reduce using rule 22 (S -> GOSUB ID .)
+    WHILE           reduce using rule 22 (S -> GOSUB ID .)
+    ID              reduce using rule 22 (S -> GOSUB ID .)
+    END             reduce using rule 22 (S -> GOSUB ID .)
+    ENDP            reduce using rule 22 (S -> GOSUB ID .)
+    DWHILE          reduce using rule 22 (S -> GOSUB ID .)
+    ENDIF           reduce using rule 22 (S -> GOSUB ID .)
+    ELSE            reduce using rule 22 (S -> GOSUB ID .)
+    ENDW            reduce using rule 22 (S -> GOSUB ID .)
+    ENDF            reduce using rule 22 (S -> GOSUB ID .)
+
+
+state 51
+
+    (23) S -> PRINT PARL . SID PARR
+    (24) SID -> . SID PLUS SID_T
+    (25) SID -> . SID_T
+    (28) SID -> . empty
+    (26) SID_T -> . STRING
+    (27) SID_T -> . ID
+    (56) empty -> .
+
+    STRING          shift and go to state 69
+    ID              shift and go to state 70
+    PARR            reduce using rule 56 (empty -> .)
+    PLUS            reduce using rule 56 (empty -> .)
+
+    SID                            shift and go to state 66
+    SID_T                          shift and go to state 67
+    empty                          shift and go to state 68
+
+state 52
+
+    (30) S -> INPUT PARL . ID PARR
+
+    ID              shift and go to state 71
+
+
+state 53
+
+    (31) S -> CMP ASSIGN . UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    UPDATE                         shift and go to state 72
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 54
+
+    (43) S -> IF CONDITION . AUXCOLON ST ENDIF
+    (44) S -> IF CONDITION . AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (55) AUXCOLON -> . COLON
+
+    COLON           shift and go to state 74
+
+    AUXCOLON                       shift and go to state 73
+
+state 55
+
+    (50) CONDITION -> UPDATE .
+    (51) CONDITION -> UPDATE . NE UPDATE
+    (52) CONDITION -> UPDATE . GT UPDATE
+    (53) CONDITION -> UPDATE . LT UPDATE
+    (54) CONDITION -> UPDATE . EQ UPDATE
+    (33) UPDATE -> UPDATE . PLUS T
+    (34) UPDATE -> UPDATE . MINUS T
+    (35) UPDATE -> UPDATE . OR T
+
+    COLON           reduce using rule 50 (CONDITION -> UPDATE .)
+    PARR            reduce using rule 50 (CONDITION -> UPDATE .)
+    ENDDO           reduce using rule 50 (CONDITION -> UPDATE .)
+    NE              shift and go to state 75
+    GT              shift and go to state 76
+    LT              shift and go to state 77
+    EQ              shift and go to state 78
+    PLUS            shift and go to state 79
+    MINUS           shift and go to state 80
+    OR              shift and go to state 81
+
+
+state 56
+
+    (32) UPDATE -> T .
+    (37) T -> T . TIMES F
+    (38) T -> T . DIVIDE F
+    (39) T -> T . AND F
+
+    NE              reduce using rule 32 (UPDATE -> T .)
+    GT              reduce using rule 32 (UPDATE -> T .)
+    LT              reduce using rule 32 (UPDATE -> T .)
+    EQ              reduce using rule 32 (UPDATE -> T .)
+    PLUS            reduce using rule 32 (UPDATE -> T .)
+    MINUS           reduce using rule 32 (UPDATE -> T .)
+    OR              reduce using rule 32 (UPDATE -> T .)
+    COLON           reduce using rule 32 (UPDATE -> T .)
+    FOR             reduce using rule 32 (UPDATE -> T .)
+    DO              reduce using rule 32 (UPDATE -> T .)
+    GOSUB           reduce using rule 32 (UPDATE -> T .)
+    PRINT           reduce using rule 32 (UPDATE -> T .)
+    INPUT           reduce using rule 32 (UPDATE -> T .)
+    IF              reduce using rule 32 (UPDATE -> T .)
+    WHILE           reduce using rule 32 (UPDATE -> T .)
+    ID              reduce using rule 32 (UPDATE -> T .)
+    END             reduce using rule 32 (UPDATE -> T .)
+    ENDP            reduce using rule 32 (UPDATE -> T .)
+    DWHILE          reduce using rule 32 (UPDATE -> T .)
+    ENDIF           reduce using rule 32 (UPDATE -> T .)
+    ELSE            reduce using rule 32 (UPDATE -> T .)
+    ENDW            reduce using rule 32 (UPDATE -> T .)
+    ENDF            reduce using rule 32 (UPDATE -> T .)
+    PARR            reduce using rule 32 (UPDATE -> T .)
+    ENDDO           reduce using rule 32 (UPDATE -> T .)
+    TIMES           shift and go to state 82
+    DIVIDE          shift and go to state 83
+    AND             shift and go to state 84
+
+
+state 57
+
+    (36) T -> F .
+
+    TIMES           reduce using rule 36 (T -> F .)
+    DIVIDE          reduce using rule 36 (T -> F .)
+    AND             reduce using rule 36 (T -> F .)
+    NE              reduce using rule 36 (T -> F .)
+    GT              reduce using rule 36 (T -> F .)
+    LT              reduce using rule 36 (T -> F .)
+    EQ              reduce using rule 36 (T -> F .)
+    PLUS            reduce using rule 36 (T -> F .)
+    MINUS           reduce using rule 36 (T -> F .)
+    OR              reduce using rule 36 (T -> F .)
+    COLON           reduce using rule 36 (T -> F .)
+    FOR             reduce using rule 36 (T -> F .)
+    DO              reduce using rule 36 (T -> F .)
+    GOSUB           reduce using rule 36 (T -> F .)
+    PRINT           reduce using rule 36 (T -> F .)
+    INPUT           reduce using rule 36 (T -> F .)
+    IF              reduce using rule 36 (T -> F .)
+    WHILE           reduce using rule 36 (T -> F .)
+    ID              reduce using rule 36 (T -> F .)
+    END             reduce using rule 36 (T -> F .)
+    ENDP            reduce using rule 36 (T -> F .)
+    DWHILE          reduce using rule 36 (T -> F .)
+    ENDIF           reduce using rule 36 (T -> F .)
+    ELSE            reduce using rule 36 (T -> F .)
+    ENDW            reduce using rule 36 (T -> F .)
+    ENDF            reduce using rule 36 (T -> F .)
+    PARR            reduce using rule 36 (T -> F .)
+    ENDDO           reduce using rule 36 (T -> F .)
+
+
+state 58
+
+    (40) F -> ID .
+
+    TIMES           reduce using rule 40 (F -> ID .)
+    DIVIDE          reduce using rule 40 (F -> ID .)
+    AND             reduce using rule 40 (F -> ID .)
+    NE              reduce using rule 40 (F -> ID .)
+    GT              reduce using rule 40 (F -> ID .)
+    LT              reduce using rule 40 (F -> ID .)
+    EQ              reduce using rule 40 (F -> ID .)
+    PLUS            reduce using rule 40 (F -> ID .)
+    MINUS           reduce using rule 40 (F -> ID .)
+    OR              reduce using rule 40 (F -> ID .)
+    COLON           reduce using rule 40 (F -> ID .)
+    FOR             reduce using rule 40 (F -> ID .)
+    DO              reduce using rule 40 (F -> ID .)
+    GOSUB           reduce using rule 40 (F -> ID .)
+    PRINT           reduce using rule 40 (F -> ID .)
+    INPUT           reduce using rule 40 (F -> ID .)
+    IF              reduce using rule 40 (F -> ID .)
+    WHILE           reduce using rule 40 (F -> ID .)
+    ID              reduce using rule 40 (F -> ID .)
+    END             reduce using rule 40 (F -> ID .)
+    ENDP            reduce using rule 40 (F -> ID .)
+    DWHILE          reduce using rule 40 (F -> ID .)
+    ENDIF           reduce using rule 40 (F -> ID .)
+    ELSE            reduce using rule 40 (F -> ID .)
+    ENDW            reduce using rule 40 (F -> ID .)
+    ENDF            reduce using rule 40 (F -> ID .)
+    PARR            reduce using rule 40 (F -> ID .)
+    ENDDO           reduce using rule 40 (F -> ID .)
+
+
+state 59
+
+    (41) F -> NUMBER .
+
+    TIMES           reduce using rule 41 (F -> NUMBER .)
+    DIVIDE          reduce using rule 41 (F -> NUMBER .)
+    AND             reduce using rule 41 (F -> NUMBER .)
+    NE              reduce using rule 41 (F -> NUMBER .)
+    GT              reduce using rule 41 (F -> NUMBER .)
+    LT              reduce using rule 41 (F -> NUMBER .)
+    EQ              reduce using rule 41 (F -> NUMBER .)
+    PLUS            reduce using rule 41 (F -> NUMBER .)
+    MINUS           reduce using rule 41 (F -> NUMBER .)
+    OR              reduce using rule 41 (F -> NUMBER .)
+    COLON           reduce using rule 41 (F -> NUMBER .)
+    FOR             reduce using rule 41 (F -> NUMBER .)
+    DO              reduce using rule 41 (F -> NUMBER .)
+    GOSUB           reduce using rule 41 (F -> NUMBER .)
+    PRINT           reduce using rule 41 (F -> NUMBER .)
+    INPUT           reduce using rule 41 (F -> NUMBER .)
+    IF              reduce using rule 41 (F -> NUMBER .)
+    WHILE           reduce using rule 41 (F -> NUMBER .)
+    ID              reduce using rule 41 (F -> NUMBER .)
+    END             reduce using rule 41 (F -> NUMBER .)
+    ENDP            reduce using rule 41 (F -> NUMBER .)
+    DWHILE          reduce using rule 41 (F -> NUMBER .)
+    ENDIF           reduce using rule 41 (F -> NUMBER .)
+    ELSE            reduce using rule 41 (F -> NUMBER .)
+    ENDW            reduce using rule 41 (F -> NUMBER .)
+    ENDF            reduce using rule 41 (F -> NUMBER .)
+    PARR            reduce using rule 41 (F -> NUMBER .)
+    ENDDO           reduce using rule 41 (F -> NUMBER .)
+
+
+state 60
+
+    (42) F -> PARL . CONDITION PARR
+    (50) CONDITION -> . UPDATE
+    (51) CONDITION -> . UPDATE NE UPDATE
+    (52) CONDITION -> . UPDATE GT UPDATE
+    (53) CONDITION -> . UPDATE LT UPDATE
+    (54) CONDITION -> . UPDATE EQ UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    CONDITION                      shift and go to state 85
+    UPDATE                         shift and go to state 55
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 61
+
+    (47) S -> WHILE AUXWHILE . CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (50) CONDITION -> . UPDATE
+    (51) CONDITION -> . UPDATE NE UPDATE
+    (52) CONDITION -> . UPDATE GT UPDATE
+    (53) CONDITION -> . UPDATE LT UPDATE
+    (54) CONDITION -> . UPDATE EQ UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    CONDITION                      shift and go to state 86
+    UPDATE                         shift and go to state 55
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 62
+
+    (48) AUXWHILE -> empty .
+
+    ID              reduce using rule 48 (AUXWHILE -> empty .)
+    NUMBER          reduce using rule 48 (AUXWHILE -> empty .)
+    PARL            reduce using rule 48 (AUXWHILE -> empty .)
+
+
+state 63
+
+    (14) P -> P AUXPOSP PROCEDURE ID COLON B . ENDP
+
+    ENDP            shift and go to state 87
+
+
+state 64
+
+    (20) S -> FOR ID IN . ID COLON ST ENDF
+
+    ID              shift and go to state 88
+
+
+state 65
+
+    (21) S -> DO COLON ST . DWHILE COLON CONDITION ENDDO
+
+    DWHILE          shift and go to state 89
+
+
+state 66
+
+    (23) S -> PRINT PARL SID . PARR
+    (24) SID -> SID . PLUS SID_T
+
+    PARR            shift and go to state 90
+    PLUS            shift and go to state 91
+
+
+state 67
+
+    (25) SID -> SID_T .
+
+    PARR            reduce using rule 25 (SID -> SID_T .)
+    PLUS            reduce using rule 25 (SID -> SID_T .)
+
+
+state 68
+
+    (28) SID -> empty .
+
+    PARR            reduce using rule 28 (SID -> empty .)
+    PLUS            reduce using rule 28 (SID -> empty .)
+
+
+state 69
+
+    (26) SID_T -> STRING .
+
+    PARR            reduce using rule 26 (SID_T -> STRING .)
+    PLUS            reduce using rule 26 (SID_T -> STRING .)
+
+
+state 70
+
+    (27) SID_T -> ID .
+
+    PARR            reduce using rule 27 (SID_T -> ID .)
+    PLUS            reduce using rule 27 (SID_T -> ID .)
+
+
+state 71
+
+    (30) S -> INPUT PARL ID . PARR
+
+    PARR            shift and go to state 92
+
+
+state 72
+
+    (31) S -> CMP ASSIGN UPDATE .
+    (33) UPDATE -> UPDATE . PLUS T
+    (34) UPDATE -> UPDATE . MINUS T
+    (35) UPDATE -> UPDATE . OR T
+
+    FOR             reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    DO              reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    GOSUB           reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    PRINT           reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    INPUT           reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    IF              reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    WHILE           reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    ID              reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    END             reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    ENDP            reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    DWHILE          reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    ENDIF           reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    ELSE            reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    ENDW            reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    ENDF            reduce using rule 31 (S -> CMP ASSIGN UPDATE .)
+    PLUS            shift and go to state 79
+    MINUS           shift and go to state 80
+    OR              shift and go to state 81
+
+
+state 73
+
+    (43) S -> IF CONDITION AUXCOLON . ST ENDIF
+    (44) S -> IF CONDITION AUXCOLON . ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (18) ST -> . S ST
+    (19) ST -> . empty
+    (20) S -> . FOR ID IN ID COLON ST ENDF
+    (21) S -> . DO COLON ST DWHILE COLON CONDITION ENDDO
+    (22) S -> . GOSUB ID
+    (23) S -> . PRINT PARL SID PARR
+    (30) S -> . INPUT PARL ID PARR
+    (31) S -> . CMP ASSIGN UPDATE
+    (43) S -> . IF CONDITION AUXCOLON ST ENDIF
+    (44) S -> . IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (47) S -> . WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (56) empty -> .
+    (29) CMP -> . ID
+
+    FOR             shift and go to state 36
+    DO              shift and go to state 38
+    GOSUB           shift and go to state 39
+    PRINT           shift and go to state 40
+    INPUT           shift and go to state 41
+    IF              shift and go to state 43
+    WHILE           shift and go to state 44
+    ENDIF           reduce using rule 56 (empty -> .)
+    ELSE            reduce using rule 56 (empty -> .)
+    ID              shift and go to state 37
+
+    ST                             shift and go to state 93
+    S                              shift and go to state 34
+    empty                          shift and go to state 35
+    CMP                            shift and go to state 42
+
+state 74
+
+    (55) AUXCOLON -> COLON .
+
+    FOR             reduce using rule 55 (AUXCOLON -> COLON .)
+    DO              reduce using rule 55 (AUXCOLON -> COLON .)
+    GOSUB           reduce using rule 55 (AUXCOLON -> COLON .)
+    PRINT           reduce using rule 55 (AUXCOLON -> COLON .)
+    INPUT           reduce using rule 55 (AUXCOLON -> COLON .)
+    IF              reduce using rule 55 (AUXCOLON -> COLON .)
+    WHILE           reduce using rule 55 (AUXCOLON -> COLON .)
+    ID              reduce using rule 55 (AUXCOLON -> COLON .)
+    ENDIF           reduce using rule 55 (AUXCOLON -> COLON .)
+    ELSE            reduce using rule 55 (AUXCOLON -> COLON .)
+    ENDW            reduce using rule 55 (AUXCOLON -> COLON .)
+
+
+state 75
+
+    (51) CONDITION -> UPDATE NE . UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    UPDATE                         shift and go to state 94
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 76
+
+    (52) CONDITION -> UPDATE GT . UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    UPDATE                         shift and go to state 95
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 77
+
+    (53) CONDITION -> UPDATE LT . UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    UPDATE                         shift and go to state 96
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 78
+
+    (54) CONDITION -> UPDATE EQ . UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    UPDATE                         shift and go to state 97
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 79
+
+    (33) UPDATE -> UPDATE PLUS . T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    T                              shift and go to state 98
+    F                              shift and go to state 57
+
+state 80
+
+    (34) UPDATE -> UPDATE MINUS . T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    T                              shift and go to state 99
+    F                              shift and go to state 57
+
+state 81
+
+    (35) UPDATE -> UPDATE OR . T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    T                              shift and go to state 100
+    F                              shift and go to state 57
+
+state 82
+
+    (37) T -> T TIMES . F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    F                              shift and go to state 101
+
+state 83
+
+    (38) T -> T DIVIDE . F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    F                              shift and go to state 102
+
+state 84
+
+    (39) T -> T AND . F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    F                              shift and go to state 103
+
+state 85
+
+    (42) F -> PARL CONDITION . PARR
+
+    PARR            shift and go to state 104
+
+
+state 86
+
+    (47) S -> WHILE AUXWHILE CONDITION . AUXCOLON ST AUXENDWHILE ENDW
+    (55) AUXCOLON -> . COLON
+
+    COLON           shift and go to state 74
+
+    AUXCOLON                       shift and go to state 105
+
+state 87
+
+    (14) P -> P AUXPOSP PROCEDURE ID COLON B ENDP .
+
+    BEGIN           reduce using rule 14 (P -> P AUXPOSP PROCEDURE ID COLON B ENDP .)
+    PROCEDURE       reduce using rule 14 (P -> P AUXPOSP PROCEDURE ID COLON B ENDP .)
+
+
+state 88
+
+    (20) S -> FOR ID IN ID . COLON ST ENDF
+
+    COLON           shift and go to state 106
+
+
+state 89
+
+    (21) S -> DO COLON ST DWHILE . COLON CONDITION ENDDO
+
+    COLON           shift and go to state 107
+
+
+state 90
+
+    (23) S -> PRINT PARL SID PARR .
+
+    FOR             reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    DO              reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    GOSUB           reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    PRINT           reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    INPUT           reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    IF              reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    WHILE           reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    ID              reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    END             reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    ENDP            reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    DWHILE          reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    ENDIF           reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    ELSE            reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    ENDW            reduce using rule 23 (S -> PRINT PARL SID PARR .)
+    ENDF            reduce using rule 23 (S -> PRINT PARL SID PARR .)
+
+
+state 91
+
+    (24) SID -> SID PLUS . SID_T
+    (26) SID_T -> . STRING
+    (27) SID_T -> . ID
+
+    STRING          shift and go to state 69
+    ID              shift and go to state 70
+
+    SID_T                          shift and go to state 108
+
+state 92
+
+    (30) S -> INPUT PARL ID PARR .
+
+    FOR             reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    DO              reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    GOSUB           reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    PRINT           reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    INPUT           reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    IF              reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    WHILE           reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    ID              reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    END             reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    ENDP            reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    DWHILE          reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    ENDIF           reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    ELSE            reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    ENDW            reduce using rule 30 (S -> INPUT PARL ID PARR .)
+    ENDF            reduce using rule 30 (S -> INPUT PARL ID PARR .)
+
+
+state 93
+
+    (43) S -> IF CONDITION AUXCOLON ST . ENDIF
+    (44) S -> IF CONDITION AUXCOLON ST . ELSE COLON AUXQ ST AUXENDIF ENDIF
+
+    ENDIF           shift and go to state 109
+    ELSE            shift and go to state 110
+
+
+state 94
+
+    (51) CONDITION -> UPDATE NE UPDATE .
+    (33) UPDATE -> UPDATE . PLUS T
+    (34) UPDATE -> UPDATE . MINUS T
+    (35) UPDATE -> UPDATE . OR T
+
+    COLON           reduce using rule 51 (CONDITION -> UPDATE NE UPDATE .)
+    PARR            reduce using rule 51 (CONDITION -> UPDATE NE UPDATE .)
+    ENDDO           reduce using rule 51 (CONDITION -> UPDATE NE UPDATE .)
+    PLUS            shift and go to state 79
+    MINUS           shift and go to state 80
+    OR              shift and go to state 81
+
+
+state 95
+
+    (52) CONDITION -> UPDATE GT UPDATE .
+    (33) UPDATE -> UPDATE . PLUS T
+    (34) UPDATE -> UPDATE . MINUS T
+    (35) UPDATE -> UPDATE . OR T
+
+    COLON           reduce using rule 52 (CONDITION -> UPDATE GT UPDATE .)
+    PARR            reduce using rule 52 (CONDITION -> UPDATE GT UPDATE .)
+    ENDDO           reduce using rule 52 (CONDITION -> UPDATE GT UPDATE .)
+    PLUS            shift and go to state 79
+    MINUS           shift and go to state 80
+    OR              shift and go to state 81
+
+
+state 96
+
+    (53) CONDITION -> UPDATE LT UPDATE .
+    (33) UPDATE -> UPDATE . PLUS T
+    (34) UPDATE -> UPDATE . MINUS T
+    (35) UPDATE -> UPDATE . OR T
+
+    COLON           reduce using rule 53 (CONDITION -> UPDATE LT UPDATE .)
+    PARR            reduce using rule 53 (CONDITION -> UPDATE LT UPDATE .)
+    ENDDO           reduce using rule 53 (CONDITION -> UPDATE LT UPDATE .)
+    PLUS            shift and go to state 79
+    MINUS           shift and go to state 80
+    OR              shift and go to state 81
+
+
+state 97
+
+    (54) CONDITION -> UPDATE EQ UPDATE .
+    (33) UPDATE -> UPDATE . PLUS T
+    (34) UPDATE -> UPDATE . MINUS T
+    (35) UPDATE -> UPDATE . OR T
+
+    COLON           reduce using rule 54 (CONDITION -> UPDATE EQ UPDATE .)
+    PARR            reduce using rule 54 (CONDITION -> UPDATE EQ UPDATE .)
+    ENDDO           reduce using rule 54 (CONDITION -> UPDATE EQ UPDATE .)
+    PLUS            shift and go to state 79
+    MINUS           shift and go to state 80
+    OR              shift and go to state 81
+
+
+state 98
+
+    (33) UPDATE -> UPDATE PLUS T .
+    (37) T -> T . TIMES F
+    (38) T -> T . DIVIDE F
+    (39) T -> T . AND F
+
+    NE              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    GT              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    LT              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    EQ              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    PLUS            reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    MINUS           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    OR              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    COLON           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    FOR             reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    DO              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    GOSUB           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    PRINT           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    INPUT           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    IF              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    WHILE           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    ID              reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    END             reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    ENDP            reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    DWHILE          reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    ENDIF           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    ELSE            reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    ENDW            reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    ENDF            reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    PARR            reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    ENDDO           reduce using rule 33 (UPDATE -> UPDATE PLUS T .)
+    TIMES           shift and go to state 82
+    DIVIDE          shift and go to state 83
+    AND             shift and go to state 84
+
+
+state 99
+
+    (34) UPDATE -> UPDATE MINUS T .
+    (37) T -> T . TIMES F
+    (38) T -> T . DIVIDE F
+    (39) T -> T . AND F
+
+    NE              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    GT              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    LT              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    EQ              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    PLUS            reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    MINUS           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    OR              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    COLON           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    FOR             reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    DO              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    GOSUB           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    PRINT           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    INPUT           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    IF              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    WHILE           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    ID              reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    END             reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    ENDP            reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    DWHILE          reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    ENDIF           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    ELSE            reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    ENDW            reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    ENDF            reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    PARR            reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    ENDDO           reduce using rule 34 (UPDATE -> UPDATE MINUS T .)
+    TIMES           shift and go to state 82
+    DIVIDE          shift and go to state 83
+    AND             shift and go to state 84
+
+
+state 100
+
+    (35) UPDATE -> UPDATE OR T .
+    (37) T -> T . TIMES F
+    (38) T -> T . DIVIDE F
+    (39) T -> T . AND F
+
+    NE              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    GT              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    LT              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    EQ              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    PLUS            reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    MINUS           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    OR              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    COLON           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    FOR             reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    DO              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    GOSUB           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    PRINT           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    INPUT           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    IF              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    WHILE           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    ID              reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    END             reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    ENDP            reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    DWHILE          reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    ENDIF           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    ELSE            reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    ENDW            reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    ENDF            reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    PARR            reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    ENDDO           reduce using rule 35 (UPDATE -> UPDATE OR T .)
+    TIMES           shift and go to state 82
+    DIVIDE          shift and go to state 83
+    AND             shift and go to state 84
+
+
+state 101
+
+    (37) T -> T TIMES F .
+
+    TIMES           reduce using rule 37 (T -> T TIMES F .)
+    DIVIDE          reduce using rule 37 (T -> T TIMES F .)
+    AND             reduce using rule 37 (T -> T TIMES F .)
+    NE              reduce using rule 37 (T -> T TIMES F .)
+    GT              reduce using rule 37 (T -> T TIMES F .)
+    LT              reduce using rule 37 (T -> T TIMES F .)
+    EQ              reduce using rule 37 (T -> T TIMES F .)
+    PLUS            reduce using rule 37 (T -> T TIMES F .)
+    MINUS           reduce using rule 37 (T -> T TIMES F .)
+    OR              reduce using rule 37 (T -> T TIMES F .)
+    COLON           reduce using rule 37 (T -> T TIMES F .)
+    FOR             reduce using rule 37 (T -> T TIMES F .)
+    DO              reduce using rule 37 (T -> T TIMES F .)
+    GOSUB           reduce using rule 37 (T -> T TIMES F .)
+    PRINT           reduce using rule 37 (T -> T TIMES F .)
+    INPUT           reduce using rule 37 (T -> T TIMES F .)
+    IF              reduce using rule 37 (T -> T TIMES F .)
+    WHILE           reduce using rule 37 (T -> T TIMES F .)
+    ID              reduce using rule 37 (T -> T TIMES F .)
+    END             reduce using rule 37 (T -> T TIMES F .)
+    ENDP            reduce using rule 37 (T -> T TIMES F .)
+    DWHILE          reduce using rule 37 (T -> T TIMES F .)
+    ENDIF           reduce using rule 37 (T -> T TIMES F .)
+    ELSE            reduce using rule 37 (T -> T TIMES F .)
+    ENDW            reduce using rule 37 (T -> T TIMES F .)
+    ENDF            reduce using rule 37 (T -> T TIMES F .)
+    PARR            reduce using rule 37 (T -> T TIMES F .)
+    ENDDO           reduce using rule 37 (T -> T TIMES F .)
+
+
+state 102
+
+    (38) T -> T DIVIDE F .
+
+    TIMES           reduce using rule 38 (T -> T DIVIDE F .)
+    DIVIDE          reduce using rule 38 (T -> T DIVIDE F .)
+    AND             reduce using rule 38 (T -> T DIVIDE F .)
+    NE              reduce using rule 38 (T -> T DIVIDE F .)
+    GT              reduce using rule 38 (T -> T DIVIDE F .)
+    LT              reduce using rule 38 (T -> T DIVIDE F .)
+    EQ              reduce using rule 38 (T -> T DIVIDE F .)
+    PLUS            reduce using rule 38 (T -> T DIVIDE F .)
+    MINUS           reduce using rule 38 (T -> T DIVIDE F .)
+    OR              reduce using rule 38 (T -> T DIVIDE F .)
+    COLON           reduce using rule 38 (T -> T DIVIDE F .)
+    FOR             reduce using rule 38 (T -> T DIVIDE F .)
+    DO              reduce using rule 38 (T -> T DIVIDE F .)
+    GOSUB           reduce using rule 38 (T -> T DIVIDE F .)
+    PRINT           reduce using rule 38 (T -> T DIVIDE F .)
+    INPUT           reduce using rule 38 (T -> T DIVIDE F .)
+    IF              reduce using rule 38 (T -> T DIVIDE F .)
+    WHILE           reduce using rule 38 (T -> T DIVIDE F .)
+    ID              reduce using rule 38 (T -> T DIVIDE F .)
+    END             reduce using rule 38 (T -> T DIVIDE F .)
+    ENDP            reduce using rule 38 (T -> T DIVIDE F .)
+    DWHILE          reduce using rule 38 (T -> T DIVIDE F .)
+    ENDIF           reduce using rule 38 (T -> T DIVIDE F .)
+    ELSE            reduce using rule 38 (T -> T DIVIDE F .)
+    ENDW            reduce using rule 38 (T -> T DIVIDE F .)
+    ENDF            reduce using rule 38 (T -> T DIVIDE F .)
+    PARR            reduce using rule 38 (T -> T DIVIDE F .)
+    ENDDO           reduce using rule 38 (T -> T DIVIDE F .)
+
+
+state 103
+
+    (39) T -> T AND F .
+
+    TIMES           reduce using rule 39 (T -> T AND F .)
+    DIVIDE          reduce using rule 39 (T -> T AND F .)
+    AND             reduce using rule 39 (T -> T AND F .)
+    NE              reduce using rule 39 (T -> T AND F .)
+    GT              reduce using rule 39 (T -> T AND F .)
+    LT              reduce using rule 39 (T -> T AND F .)
+    EQ              reduce using rule 39 (T -> T AND F .)
+    PLUS            reduce using rule 39 (T -> T AND F .)
+    MINUS           reduce using rule 39 (T -> T AND F .)
+    OR              reduce using rule 39 (T -> T AND F .)
+    COLON           reduce using rule 39 (T -> T AND F .)
+    FOR             reduce using rule 39 (T -> T AND F .)
+    DO              reduce using rule 39 (T -> T AND F .)
+    GOSUB           reduce using rule 39 (T -> T AND F .)
+    PRINT           reduce using rule 39 (T -> T AND F .)
+    INPUT           reduce using rule 39 (T -> T AND F .)
+    IF              reduce using rule 39 (T -> T AND F .)
+    WHILE           reduce using rule 39 (T -> T AND F .)
+    ID              reduce using rule 39 (T -> T AND F .)
+    END             reduce using rule 39 (T -> T AND F .)
+    ENDP            reduce using rule 39 (T -> T AND F .)
+    DWHILE          reduce using rule 39 (T -> T AND F .)
+    ENDIF           reduce using rule 39 (T -> T AND F .)
+    ELSE            reduce using rule 39 (T -> T AND F .)
+    ENDW            reduce using rule 39 (T -> T AND F .)
+    ENDF            reduce using rule 39 (T -> T AND F .)
+    PARR            reduce using rule 39 (T -> T AND F .)
+    ENDDO           reduce using rule 39 (T -> T AND F .)
+
+
+state 104
+
+    (42) F -> PARL CONDITION PARR .
+
+    TIMES           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    DIVIDE          reduce using rule 42 (F -> PARL CONDITION PARR .)
+    AND             reduce using rule 42 (F -> PARL CONDITION PARR .)
+    NE              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    GT              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    LT              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    EQ              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    PLUS            reduce using rule 42 (F -> PARL CONDITION PARR .)
+    MINUS           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    OR              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    COLON           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    FOR             reduce using rule 42 (F -> PARL CONDITION PARR .)
+    DO              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    GOSUB           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    PRINT           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    INPUT           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    IF              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    WHILE           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    ID              reduce using rule 42 (F -> PARL CONDITION PARR .)
+    END             reduce using rule 42 (F -> PARL CONDITION PARR .)
+    ENDP            reduce using rule 42 (F -> PARL CONDITION PARR .)
+    DWHILE          reduce using rule 42 (F -> PARL CONDITION PARR .)
+    ENDIF           reduce using rule 42 (F -> PARL CONDITION PARR .)
+    ELSE            reduce using rule 42 (F -> PARL CONDITION PARR .)
+    ENDW            reduce using rule 42 (F -> PARL CONDITION PARR .)
+    ENDF            reduce using rule 42 (F -> PARL CONDITION PARR .)
+    PARR            reduce using rule 42 (F -> PARL CONDITION PARR .)
+    ENDDO           reduce using rule 42 (F -> PARL CONDITION PARR .)
+
+
+state 105
+
+    (47) S -> WHILE AUXWHILE CONDITION AUXCOLON . ST AUXENDWHILE ENDW
+    (18) ST -> . S ST
+    (19) ST -> . empty
+    (20) S -> . FOR ID IN ID COLON ST ENDF
+    (21) S -> . DO COLON ST DWHILE COLON CONDITION ENDDO
+    (22) S -> . GOSUB ID
+    (23) S -> . PRINT PARL SID PARR
+    (30) S -> . INPUT PARL ID PARR
+    (31) S -> . CMP ASSIGN UPDATE
+    (43) S -> . IF CONDITION AUXCOLON ST ENDIF
+    (44) S -> . IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (47) S -> . WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (56) empty -> .
+    (29) CMP -> . ID
+
+    FOR             shift and go to state 36
+    DO              shift and go to state 38
+    GOSUB           shift and go to state 39
+    PRINT           shift and go to state 40
+    INPUT           shift and go to state 41
+    IF              shift and go to state 43
+    WHILE           shift and go to state 44
+    ENDW            reduce using rule 56 (empty -> .)
+    ID              shift and go to state 37
+
+    ST                             shift and go to state 111
+    S                              shift and go to state 34
+    empty                          shift and go to state 35
+    CMP                            shift and go to state 42
+
+state 106
+
+    (20) S -> FOR ID IN ID COLON . ST ENDF
+    (18) ST -> . S ST
+    (19) ST -> . empty
+    (20) S -> . FOR ID IN ID COLON ST ENDF
+    (21) S -> . DO COLON ST DWHILE COLON CONDITION ENDDO
+    (22) S -> . GOSUB ID
+    (23) S -> . PRINT PARL SID PARR
+    (30) S -> . INPUT PARL ID PARR
+    (31) S -> . CMP ASSIGN UPDATE
+    (43) S -> . IF CONDITION AUXCOLON ST ENDIF
+    (44) S -> . IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (47) S -> . WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (56) empty -> .
+    (29) CMP -> . ID
+
+    FOR             shift and go to state 36
+    DO              shift and go to state 38
+    GOSUB           shift and go to state 39
+    PRINT           shift and go to state 40
+    INPUT           shift and go to state 41
+    IF              shift and go to state 43
+    WHILE           shift and go to state 44
+    ENDF            reduce using rule 56 (empty -> .)
+    ID              shift and go to state 37
+
+    ST                             shift and go to state 112
+    S                              shift and go to state 34
+    empty                          shift and go to state 35
+    CMP                            shift and go to state 42
+
+state 107
+
+    (21) S -> DO COLON ST DWHILE COLON . CONDITION ENDDO
+    (50) CONDITION -> . UPDATE
+    (51) CONDITION -> . UPDATE NE UPDATE
+    (52) CONDITION -> . UPDATE GT UPDATE
+    (53) CONDITION -> . UPDATE LT UPDATE
+    (54) CONDITION -> . UPDATE EQ UPDATE
+    (32) UPDATE -> . T
+    (33) UPDATE -> . UPDATE PLUS T
+    (34) UPDATE -> . UPDATE MINUS T
+    (35) UPDATE -> . UPDATE OR T
+    (36) T -> . F
+    (37) T -> . T TIMES F
+    (38) T -> . T DIVIDE F
+    (39) T -> . T AND F
+    (40) F -> . ID
+    (41) F -> . NUMBER
+    (42) F -> . PARL CONDITION PARR
+
+    ID              shift and go to state 58
+    NUMBER          shift and go to state 59
+    PARL            shift and go to state 60
+
+    CONDITION                      shift and go to state 113
+    UPDATE                         shift and go to state 55
+    T                              shift and go to state 56
+    F                              shift and go to state 57
+
+state 108
+
+    (24) SID -> SID PLUS SID_T .
+
+    PARR            reduce using rule 24 (SID -> SID PLUS SID_T .)
+    PLUS            reduce using rule 24 (SID -> SID PLUS SID_T .)
+
+
+state 109
+
+    (43) S -> IF CONDITION AUXCOLON ST ENDIF .
+
+    FOR             reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    DO              reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    GOSUB           reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    PRINT           reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    INPUT           reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    IF              reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    WHILE           reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    ID              reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    END             reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    ENDP            reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    DWHILE          reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    ENDIF           reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    ELSE            reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    ENDW            reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+    ENDF            reduce using rule 43 (S -> IF CONDITION AUXCOLON ST ENDIF .)
+
+
+state 110
+
+    (44) S -> IF CONDITION AUXCOLON ST ELSE . COLON AUXQ ST AUXENDIF ENDIF
+
+    COLON           shift and go to state 114
+
+
+state 111
+
+    (47) S -> WHILE AUXWHILE CONDITION AUXCOLON ST . AUXENDWHILE ENDW
+    (49) AUXENDWHILE -> . empty
+    (56) empty -> .
+
+    ENDW            reduce using rule 56 (empty -> .)
+
+    AUXENDWHILE                    shift and go to state 115
+    empty                          shift and go to state 116
+
+state 112
+
+    (20) S -> FOR ID IN ID COLON ST . ENDF
+
+    ENDF            shift and go to state 117
+
+
+state 113
+
+    (21) S -> DO COLON ST DWHILE COLON CONDITION . ENDDO
+
+    ENDDO           shift and go to state 118
+
+
+state 114
+
+    (44) S -> IF CONDITION AUXCOLON ST ELSE COLON . AUXQ ST AUXENDIF ENDIF
+    (45) AUXQ -> . empty
+    (56) empty -> .
+
+    FOR             reduce using rule 56 (empty -> .)
+    DO              reduce using rule 56 (empty -> .)
+    GOSUB           reduce using rule 56 (empty -> .)
+    PRINT           reduce using rule 56 (empty -> .)
+    INPUT           reduce using rule 56 (empty -> .)
+    IF              reduce using rule 56 (empty -> .)
+    WHILE           reduce using rule 56 (empty -> .)
+    ID              reduce using rule 56 (empty -> .)
+    ENDIF           reduce using rule 56 (empty -> .)
+
+    AUXQ                           shift and go to state 119
+    empty                          shift and go to state 120
+
+state 115
+
+    (47) S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE . ENDW
+
+    ENDW            shift and go to state 121
+
+
+state 116
+
+    (49) AUXENDWHILE -> empty .
+
+    ENDW            reduce using rule 49 (AUXENDWHILE -> empty .)
+
+
+state 117
+
+    (20) S -> FOR ID IN ID COLON ST ENDF .
+
+    FOR             reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    DO              reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    GOSUB           reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    PRINT           reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    INPUT           reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    IF              reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    WHILE           reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    ID              reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    END             reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    ENDP            reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    DWHILE          reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    ENDIF           reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    ELSE            reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    ENDW            reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+    ENDF            reduce using rule 20 (S -> FOR ID IN ID COLON ST ENDF .)
+
+
+state 118
+
+    (21) S -> DO COLON ST DWHILE COLON CONDITION ENDDO .
+
+    FOR             reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    DO              reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    GOSUB           reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    PRINT           reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    INPUT           reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    IF              reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    WHILE           reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    ID              reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    END             reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    ENDP            reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    DWHILE          reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    ENDIF           reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    ELSE            reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    ENDW            reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+    ENDF            reduce using rule 21 (S -> DO COLON ST DWHILE COLON CONDITION ENDDO .)
+
+
+state 119
+
+    (44) S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ . ST AUXENDIF ENDIF
+    (18) ST -> . S ST
+    (19) ST -> . empty
+    (20) S -> . FOR ID IN ID COLON ST ENDF
+    (21) S -> . DO COLON ST DWHILE COLON CONDITION ENDDO
+    (22) S -> . GOSUB ID
+    (23) S -> . PRINT PARL SID PARR
+    (30) S -> . INPUT PARL ID PARR
+    (31) S -> . CMP ASSIGN UPDATE
+    (43) S -> . IF CONDITION AUXCOLON ST ENDIF
+    (44) S -> . IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF
+    (47) S -> . WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW
+    (56) empty -> .
+    (29) CMP -> . ID
+
+    FOR             shift and go to state 36
+    DO              shift and go to state 38
+    GOSUB           shift and go to state 39
+    PRINT           shift and go to state 40
+    INPUT           shift and go to state 41
+    IF              shift and go to state 43
+    WHILE           shift and go to state 44
+    ENDIF           reduce using rule 56 (empty -> .)
+    ID              shift and go to state 37
+
+    ST                             shift and go to state 122
+    S                              shift and go to state 34
+    empty                          shift and go to state 35
+    CMP                            shift and go to state 42
+
+state 120
+
+    (45) AUXQ -> empty .
+
+    FOR             reduce using rule 45 (AUXQ -> empty .)
+    DO              reduce using rule 45 (AUXQ -> empty .)
+    GOSUB           reduce using rule 45 (AUXQ -> empty .)
+    PRINT           reduce using rule 45 (AUXQ -> empty .)
+    INPUT           reduce using rule 45 (AUXQ -> empty .)
+    IF              reduce using rule 45 (AUXQ -> empty .)
+    WHILE           reduce using rule 45 (AUXQ -> empty .)
+    ID              reduce using rule 45 (AUXQ -> empty .)
+    ENDIF           reduce using rule 45 (AUXQ -> empty .)
+
+
+state 121
+
+    (47) S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .
+
+    FOR             reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    DO              reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    GOSUB           reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    PRINT           reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    INPUT           reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    IF              reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    WHILE           reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    ID              reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    END             reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    ENDP            reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    DWHILE          reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    ENDIF           reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    ELSE            reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    ENDW            reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+    ENDF            reduce using rule 47 (S -> WHILE AUXWHILE CONDITION AUXCOLON ST AUXENDWHILE ENDW .)
+
+
+state 122
+
+    (44) S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST . AUXENDIF ENDIF
+    (46) AUXENDIF -> . empty
+    (56) empty -> .
+
+    ENDIF           reduce using rule 56 (empty -> .)
+
+    AUXENDIF                       shift and go to state 123
+    empty                          shift and go to state 124
+
+state 123
+
+    (44) S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF . ENDIF
+
+    ENDIF           shift and go to state 125
+
+
+state 124
+
+    (46) AUXENDIF -> empty .
+
+    ENDIF           reduce using rule 46 (AUXENDIF -> empty .)
+
+
+state 125
+
+    (44) S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .
+
+    FOR             reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    DO              reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    GOSUB           reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    PRINT           reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    INPUT           reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    IF              reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    WHILE           reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    ID              reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    END             reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    ENDP            reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    DWHILE          reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    ENDIF           reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    ELSE            reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    ENDW            reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+    ENDF            reduce using rule 44 (S -> IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF .)
+

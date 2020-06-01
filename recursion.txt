@@ -1,0 +1,38 @@
+program:
+    var x: int
+
+    procedure xToTwenty:
+        begin:
+        x = x + 20
+        print("x is equal to twenty two")
+    endp
+
+
+    procedure plusTwo:
+        begin:
+        x = x + 2
+        print("X now is 0 plus 2")
+        GOSUB xToTwenty
+    endp
+
+    procedure minusOne:
+        begin:
+        if x > 0:
+            x = x - 1
+            print(x)
+            GOSUB minusOne
+        else:
+            print("x is now 0")
+            GOSUB plusTwo
+        endif
+    endp
+
+
+    begin:
+        x = 10
+        print("Actual value of x:")
+        print(x)
+        GOSUB minusOne
+        print("It went back")
+
+end

@@ -1,0 +1,144 @@
+program:
+    var A, B, C, Y1, a, b, c, error, errorneg, aux, Y2, Y, aux2, aux3: FLOAT
+    var answer: int
+
+    procedure askValues:
+        begin:
+         print("Ingrese los coeficientes de la funcion Ax2+Bx+C en ese orden")
+        input(A)
+        input(B)
+        input(C)
+
+        print("Ingrese los limites a y b para comenzar")
+        input(a)
+        input(b)
+    endp
+
+    procedure calcY:
+        begin:
+            Y = A*aux*aux + B*aux + C
+    endp
+
+    begin:
+
+         gosub askValues
+
+        error = 0.5
+        errorneg = -0.5
+
+        # First iteration
+        aux = a
+        GOSUB calcY
+        Y1 = Y
+        aux = b
+        GOSUB calcY
+        Y2 = Y
+
+        aux2 = Y2 * Y1
+
+        while aux2 > 0:
+            c = (a + b) / 2
+            b = c
+
+            aux = a
+            GOSUB calcY
+            Y1 = Y
+            aux = b
+            GOSUB calcY
+            Y2 = Y
+            aux2 = Y2 * Y1
+        endw
+
+        c = a
+
+        aux2 = b - a
+
+      while ((aux2 > error) or (aux2 < errorneg)) and Y != 0 :
+            c = (a + b) / 2
+            aux = c
+            GOSUB calcY
+
+            if Y == 0:
+                print("The root is:")
+                print(c)
+            else:
+                aux2 = Y* Y1
+                if aux2 < 0:
+                    b = c
+                else:
+                    a = c
+                endif
+            endif
+
+            aux2 = b - a
+        endw
+
+        print(c)
+
+        print("Do you want to enter another function?")
+        print("1 for yes and 2 for no")
+        input(answer)
+
+        while answer == 1:
+            gosub askValues
+
+            error = 0.5
+            errorneg = -0.5
+
+            # First iteration
+            aux = a
+            GOSUB calcY
+            Y1 = Y
+            aux = b
+            GOSUB calcY
+            Y2 = Y
+
+            aux2 = Y2 * Y1
+
+            while aux2 > 0:
+                c = (a + b) / 2
+                b = c
+
+                aux = a
+                GOSUB calcY
+                Y1 = Y
+                aux = b
+                GOSUB calcY
+                Y2 = Y
+                aux2 = Y2 * Y1
+            endw
+
+            c = a
+
+            aux2 = b - a
+
+        while ((aux2 > error) or (aux2 < errorneg)) and Y != 0 :
+                c = (a + b) / 2
+                aux = c
+                GOSUB calcY
+
+                if Y == 0:
+                    print("The root is:")
+                    print(c)
+                else:
+                    aux2 = Y* Y1
+                    if aux2 < 0:
+                        b = c
+                    else:
+                        a = c
+                    endif
+                endif
+
+                aux2 = b - a
+            endw
+
+            print(c)
+
+             print("Do you want to enter another function?")
+            print("1 for yes and 2 for no")
+            input(answer)
+        endw
+
+     print("Thanks for using this program")
+
+end

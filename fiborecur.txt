@@ -1,0 +1,73 @@
+program:
+    var a1, b1, a2, b2, bool, i, k: int
+    var x, y, z: matrix
+
+    procedure MathSum:
+        begin:
+        for i in a1:
+            for k in b1:
+                #z[i][k] = x[i][k] + y[i][k]
+            endf
+        endf
+    endp
+
+    procedure Dimensiones:
+        begin:
+        if a1 == a2:
+            if b1 == b2:
+                bool = 1
+            else:
+                bool = 0
+            endif
+        else:
+            bool = 0
+        endif
+    endp
+
+    procedure inputDimensionsX:
+        begin:
+        for i in a1:
+            for k in b1:
+                input(x[i][k])
+            endf
+        endf
+    endp
+
+    procedure inputDimensionsY:
+        begin:
+        for i in a1:
+            for k in b1:
+                input(y[i][k])
+            endf
+        endf
+    endp
+
+    begin:
+    print("Introduzca las dimensiones de las matrices")
+    do:
+        print("Matriz A filas: ")
+        input(a1)
+        print("Matriz A comlumnas: ")
+        input(b1)
+        #x = x[a1][b1]
+        print("Matriz B filas: ")
+        input(a2)
+        print("Matriz B comlumnas: ")
+        input(b2)
+        #y = y[a2][b2]
+
+        GOSUB Dimensiones
+
+        if bool == 1:
+            #z = zeros[a1][b1]
+            print("Introduza la matriz A")
+            GOSUB inputDimensionsX
+            print("Introduza la matriz B")
+            GOSUB inputDimensionsY
+            GOSUB MathSum
+        else:
+            print("Dimensiones de matrices no coinciden, reingresar datos")
+        endif
+    dwhile: bool == 0
+    enddo
+end
