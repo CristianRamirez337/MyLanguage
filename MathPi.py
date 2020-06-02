@@ -2,9 +2,8 @@ from MathPi_Lexer import tokens
 from collections import deque
 import ply.yacc as yacc
 
-
 program_instructions = []
-programCounter = 0
+program_counter = 0
 
 # -----------------------------------~ YACC ~-----------------------------------
 
@@ -23,16 +22,20 @@ precedence = (
 def p_program(p):
     ''' program : PROGRAM COLON V MAIN P B END'''
 
+
 def p_MAIN(p):
     ''' MAIN : empty'''
-    global programCounter
+    global program_counter
     program_instructions.append("Goto ")
-    programCounter += 1
+    program_counter += 1
+
+
 # --------------------------------< END OF GENERAL PROGRAM >--------------------------------
 
 
 # -----------------------------------< VARIABLES >-----------------------------------
 symbols = {}
+
 
 def p_V(p):
     ''' V : V VAR VM COLON TIPO
@@ -44,11 +47,39 @@ def p_VM(p):
     symbols[p[1]] = ["NULL", "TYPE"]
 
 
+def p_VM_array(p):
+    ''' VM : ID SQBL NUMBER SQBR VM2'''
+    symbols[p[1]] = ["NULL", "TYPE", p[3]]
+
+
+def p_VM_matrix(p):
+    ''' VM : ID SQBL NUMBER COMMA NUMBER SQBR VM2'''
+    symbols[p[1]] = ["NULL", "TYPE", [p[3], p[5]]]
+
+
+def p_VM_cube(p):
+    ''' VM : ID SQBL NUMBER COMMA NUMBER COMMA NUMBER SQBR VM2'''
+    symbols[p[1]] = ["NULL", "TYPE", [p[3], p[5], p[7]]]
+
 
 def p_VM2(p):
     ''' VM2 : COMMA ID VM2'''
     symbols[p[2]] = ["NULL", "TYPE"]
 
+
+def p_VM2_array(p):
+    ''' VM2 : COMMA ID SQBL NUMBER  SQBR VM2'''
+    symbols[p[2]] = ["NULL", "TYPE", p[4]]
+
+
+def p_VM2_matrix(p):
+    ''' VM2 : COMMA ID SQBL NUMBER COMMA NUMBER SQBR VM2'''
+    symbols[p[2]] = ["NULL", "TYPE", [p[4], p[6]]]
+
+
+def p_VM2_cube(p):
+    ''' VM2 : COMMA ID SQBL NUMBER COMMA NUMBER COMMA NUMBER SQBR VM2'''
+    symbols[p[2]] = ["NULL", "TYPE", [p[4], p[6], p[8]]]
 
 
 def p_VM2_empty(p):
@@ -59,13 +90,17 @@ def p_VM2_empty(p):
 def p_TIPO(p):
     ''' TIPO : FLOAT
     | INT
-    | ARRAY
-    | MATRIX
-    | CUBE
+    | ARRAY_INT
+    | ARRAY_FLOAT
+    | MATRIX_INT
+    | MATRIX_FLOAT
+    | CUBE_INT
+    | CUBE_FLOAT
     | BOOL'''
     for i in symbols:
         if symbols[i][1] == "TYPE":
             symbols[i][1] = p[1]
+
 
 # -----------------------------------< END OF VARIABLES >-----------------------------------
 
@@ -73,23 +108,25 @@ def p_TIPO(p):
 # -----------------------------------< PROCEDURES >-----------------------------------
 proceduresPos = deque()
 
+
 def p_P(p):
     ''' P : P  AUXPOSP PROCEDURE ID COLON B ENDP'''
-    global programCounter
+    global program_counter
     symbols[p[4]] = [proceduresPos.popleft(), "PROCEDURE"]
     program_instructions.append('END PROCEDURE')
-    programCounter += 1
-    program_instructions[0] = "Goto " + str(programCounter)
+    program_counter += 1
+    program_instructions[0] = "Goto " + str(program_counter)
 
 
 def p_P_empty(p):
     ''' P : empty'''
-    program_instructions[0] = "Goto " + str(programCounter)
+    program_instructions[0] = "Goto " + str(program_counter)
 
 
 def p_AUXPOSP(p):
     ''' AUXPOSP : empty'''
-    proceduresPos.append(programCounter)
+    proceduresPos.append(program_counter)
+
 
 # -----------------------------------< END OF PROCEDURES >-----------------------------------
 
@@ -102,6 +139,8 @@ def p_B(p):
 def p_ST(p):
     ''' ST : S ST
     | empty'''
+
+
 # ---------------------------< END OF MAIN PROGRAM or INTERMADIATE CODE >---------------------------
 
 
@@ -111,21 +150,24 @@ def p_S(p):
     | DO COLON ST DWHILE COLON CONDITION ENDDO
     '''
 
+
 # +++++++++++++++ / SUBROUTINES \ +++++++++++++++
 def p_S_GOSUB(p):
     ''' S : GOSUB ID'''
-    global programCounter
+    global program_counter
     program_instructions.append('GOSUB ' + p[2])
-    programCounter += 1
+    program_counter += 1
+
+
 # +++++++++++++++ / PRINT MANAGEMENT \ +++++++++++++++
 stringsL = ''
 
 
 def p_S_PRINT(p):
     '''S : PRINT PARL SID PARR'''
-    global programCounter, stringsL
+    global program_counter, stringsL
     program_instructions.append(['PRINT', stringsL])
-    programCounter += 1
+    program_counter += 1
     stringsL = ''
 
 
@@ -143,42 +185,55 @@ def p_SID_T(p):
     global stringsL
     stringsL = stringsL + str(p[1])
 
-# def p_SID2(p):
-#     '''SID2 : SID2 PLUS VMC
-#     | SID2 PLUS STRING'''
-#     global stringsL
-#     stringsL = stringsL + str(p[1])
-
 
 def p_SID2_empty(p):
     '''SID : empty'''
 
-# To accept arrays, cubes and ID alone
-# def p_VMC(p):
-#     '''VMC : ID
-#     | ID SQBL CMP SQBR SQBL CMP SQBR
-#     | ID SQBL CMP SQBR SQBL CMP SQBR SQBL CMP SQBR'''
-
-
-def p_CMP(p):
-    '''CMP : ID'''
-    operandsStack.append('-' + p[1])
-
 
 # +++++++++++++++ / INPUT MANAGEMENT \ +++++++++++++++
-def p_S_INPUT(p):
-    '''S : INPUT PARL ID PARR'''
-    global programCounter
-    program_instructions.append("INPUT " + p[3])
-    programCounter += 1
+# ID number is to get if the value inside the square brackets is an id or a number
+id_number = ''
 
-# def p_IID(p):
-#     '''IID : VMC IID2'''
-#
-#
-# def p_IID2(p):
-#     '''IID2 : COMMA VMC  IID2
-#     | empty'''
+
+def p_S_input(p):
+    '''S : INPUT PARL ID PARR'''
+    global program_counter
+    program_instructions.append("INPUT " + p[3])
+    program_counter += 1
+
+
+def p_S_input_array_id(p):
+    '''S : INPUT PARL ID SQBL IDNUM SQBR PARR'''
+    global program_counter, id_number
+    program_instructions.append("INPUT-ARRAY " + p[3] + '[' + str(id_number) + ']')
+    program_counter += 1
+    id_number = ''
+
+
+def p_S_input_matrix_id(p):
+    '''S : INPUT PARL ID SQBL IDNUM COMMA IDNUM SQBR PARR'''
+    global program_counter, id_number
+    program_instructions.append("INPUT-MATRIX " + p[3] + '[' + str(id_number) + ']')
+    program_counter += 1
+    id_number = ''
+
+
+def p_S_input_cube_id(p):
+    '''S : INPUT PARL ID SQBL IDNUM COMMA IDNUM COMMA IDNUM SQBR PARR'''
+    global program_counter, id_number
+    program_instructions.append("INPUT-CUBE " + p[3] + '[' + str(id_number) + ']')
+    program_counter += 1
+    id_number = ''
+
+
+def p_id_number(p):
+    '''IDNUM : ID
+    | NUMBER'''
+    global id_number
+    if len(str(id_number)) > 0:
+        id_number = str(id_number) + ',' + str(p[1])
+    else:
+        id_number = str(p[1])
 
 
 # +++++++++++++++++++++/ ASSIGN OR UPDATE MANAGEMENT \++++++++++++++++++++++
@@ -188,7 +243,7 @@ def p_S_INPUT(p):
 
 
 def p_S_ASSIGN(p):
-    ''' S : CMP ASSIGN UPDATE'''
+    ''' S : VAMC ASSIGN UPDATE'''
     quadruple_generation(p[2])
 
 
@@ -218,29 +273,86 @@ def p_T2(p):
 def p_F(p):
     '''F : ID'''
     if p[1] in symbols:
-        operandsStack.append('-' + p[1])
+        operands_stack.append('-' + p[1])
     else:
         print("Variable '" + p[1] + "' not declared yet")
 
 
+# Productions F with sized variables
+def p_F_array(p):
+    '''F : ID SQBL IDNUM SQBR'''
+    if p[1] in symbols:
+        global id_number
+        operands_stack.append('-' + p[1] + '[' + str(id_number) + ']')
+        id_number = ''
+    else:
+        print("Variable '" + p[1] + "' not declared yet")
+
+
+def p_F_matrix(p):
+    '''F : ID SQBL IDNUM COMMA IDNUM SQBR'''
+    if p[1] in symbols:
+        global id_number
+        operands_stack.append('-' + p[1] + '[' + str(id_number) + ']')
+        id_number = ''
+    else:
+        print("Variable '" + p[1] + "' not declared yet")
+
+def p_F_cube(p):
+    '''F : ID SQBL IDNUM COMMA IDNUM COMMA IDNUM SQBR'''
+    if p[1] in symbols:
+        global id_number
+        operands_stack.append('-' + p[1] + '[' + str(id_number) + ']')
+        id_number = ''
+    else:
+        print("Variable '" + p[1] + "' not declared yet")
+
+
+# F with a number value
 def p_F_NUMBER(p):
     '''F : NUMBER'''
-    operandsStack.append(p[1])
+    operands_stack.append(p[1])
+
 
 def p_FtoE(p):
     '''F : PARL CONDITION PARR'''
 
 
+# To handle variables, array, matrix, cube assign function
+def p_vamc(p):
+    '''VAMC : ID'''
+    operands_stack.append('-' + p[1])
+
+
+def p_vamc_array(p):
+    '''VAMC : ID SQBL IDNUM SQBR'''
+    global id_number
+    operands_stack.append('-' + p[1] + '[' + str(id_number) + ']')
+    id_number = ''
+
+def p_vamc_matrix(p):
+    '''VAMC : ID SQBL IDNUM COMMA IDNUM SQBR'''
+    global id_number
+    operands_stack.append('-' + p[1] + '[' + str(id_number) + ']')
+    id_number = ''
+
+def p_vamc_cube(p):
+    '''VAMC : ID SQBL IDNUM COMMA IDNUM COMMA IDNUM SQBR'''
+    global id_number
+    operands_stack.append('-' + p[1] + '[' + str(id_number) + ']')
+    id_number = ''
+
 # +++++++++++++++++++++/ IF MANAGEMENT \++++++++++++++++++++++
 def p_S_IF(p):
     '''S : IF CONDITION AUXCOLON ST ENDIF'''
-    global programCounter
-    programCounter += 1
-    program_instructions.append('Goto ' + str(programCounter))
+    global program_counter
+    program_counter += 1
+    program_instructions.append('Goto ' + str(program_counter))
 
-    aux = goToFPosition.pop()
+    aux = go_to_f_position.pop()
     aux2 = program_instructions[aux].find(' - ')
-    program_instructions[aux] = program_instructions[aux][0:aux2 + 1] + str(programCounter)
+    program_instructions[aux] = program_instructions[aux][0:aux2 + 1] + str(program_counter)
+
 
 def p_S_IF2(p):
     '''S : IF CONDITION AUXCOLON ST ELSE COLON AUXQ ST AUXENDIF ENDIF'''
@@ -249,23 +361,24 @@ def p_S_IF2(p):
 # AUX to adjust quadruple stack and insert the Goto after the true statements and to modify the go to false
 def p_AUXQ(p):
     '''AUXQ : empty'''
-    global programCounter
-    programCounter += 1
+    global program_counter
+    program_counter += 1
     program_instructions.append('Goto ')
-    firstInstructionCondition.append(programCounter)
+    first_instruction_condition.append(program_counter)
 
-    aux = goToFPosition.pop()
+    aux = go_to_f_position.pop()
     aux2 = program_instructions[aux].find(' - ')
-    program_instructions[aux] = program_instructions[aux][0:aux2 + 1] + str(programCounter)
+    program_instructions[aux] = program_instructions[aux][0:aux2 + 1] + str(program_counter)
+
 
 def p_AUXENDIF(p):
     '''AUXENDIF : empty'''
-    global programCounter
-    programCounter += 1
-    program_instructions.append('Goto ' + str(programCounter))
+    global program_counter
+    program_counter += 1
+    program_instructions.append('Goto ' + str(program_counter))
 
-    aux = firstInstructionCondition.pop()
-    program_instructions[aux - 1] = 'Goto ' + str(programCounter)
+    aux = first_instruction_condition.pop()
+    program_instructions[aux - 1] = 'Goto ' + str(program_counter)
 
 
 # +++++++++++++++++++++/ WHILE MANAGEMENT \++++++++++++++++++++++
@@ -275,70 +388,71 @@ def p_S_WHILE(p):
 
 def p_AUXWHILE(p):
     '''AUXWHILE : empty'''
-    firstInstructionCondition.append(programCounter)
+    first_instruction_condition.append(program_counter)
+
 
 def p_AUXENDWHILE(p):
     '''AUXENDWHILE : empty'''
-    global programCounter
-    program_instructions.append('Goto ' + str(firstInstructionCondition.pop()))
-    programCounter += 1
+    global program_counter
+    program_instructions.append('Goto ' + str(first_instruction_condition.pop()))
+    program_counter += 1
 
-    aux = goToFPosition.pop()
+    aux = go_to_f_position.pop()
     aux2 = program_instructions[aux].find(' - ')
-    program_instructions[aux] = program_instructions[aux][0:aux2 + 1] + str(programCounter)
-
+    program_instructions[aux] = program_instructions[aux][0:aux2 + 1] + str(program_counter)
 
 
 # +++++++++++++++++++++/ QUADRUPLES DEFINITION \++++++++++++++++++++++
 # Quadruples stacks variables
-operandsStack = deque()
-executionQueue = []  # List to store quadruples
-availTemporales = deque(['T1'])
-availAux = [] # Temporal in use
+operands_stack = deque()
+execution_queue = []  # List to store quadruples
+avail_temporales = deque(['T1'])
+avail_aux = []  # Temporal in use
 iAvail = 2  # Execution index
 
 
 # Looking for existing avails
-def existingAvail(value):
+def existing_avail(value):
     try:
-        availAux.index(value)
-        availTemporales.append(value)
-        availAux.remove(value)
+        avail_aux.index(value)
+        avail_temporales.append(value)
+        avail_aux.remove(value)
     except:
         pass
 
+
 def quadruple_generation(operator):
     global iAvail
-    executionQueue.append(operator)
+    execution_queue.append(operator)
     # Operands
-    auxOperand = operandsStack.pop()
-    executionQueue.append(operandsStack.pop())
+    aux_operand = operands_stack.pop()
+    execution_queue.append(operands_stack.pop())
 
-    existingAvail(executionQueue[-1])  # Operand equal to a temporal
+    existing_avail(execution_queue[-1])  # Operand equal to a temporal
 
-    executionQueue.append(auxOperand)
+    execution_queue.append(aux_operand)
 
-    existingAvail(executionQueue[-1])  # Operand equal to a temporal
+    existing_avail(execution_queue[-1])  # Operand equal to a temporal
 
     if operator != '=':
-        operandsStack.append(availTemporales.popleft())
-        executionQueue.append(operandsStack[-1])
-        availAux.append(operandsStack[-1])
-        availTemporales.append('T' + str(iAvail))  # New temporal
+        operands_stack.append(avail_temporales.popleft())
+        execution_queue.append(operands_stack[-1])
+        avail_aux.append(operands_stack[-1])
+        avail_temporales.append('T' + str(iAvail))  # New temporal
         iAvail += 1
 
-    #print(executionQueue)
+    # print(execution_queue)
 
-    global programCounter
-    program_instructions.append(executionQueue[:])
-    programCounter += 1
+    global program_counter
+    program_instructions.append(execution_queue[:])
+    program_counter += 1
 
-    executionQueue.clear()
+    execution_queue.clear()
 
 
 # +++++++++++++++++++++/ CONDITION MANAGEMENT \++++++++++++++++++++++
-firstInstructionCondition = []
-goToFPosition = []
+first_instruction_condition = []
+go_to_f_position = []
 
 
 def p_CONDITION(p):
@@ -360,10 +474,10 @@ def p_AUXCOLON(p):
 
 
 def go2F():
-    global programCounter
+    global program_counter
     program_instructions.append("GotoF~" + str(program_instructions[-1][-1]) + " - ")
-    goToFPosition.append(programCounter)
-    programCounter += 1
+    go_to_f_position.append(program_counter)
+    program_counter += 1
 
 
 # ---------------------------------< END STATEMENTS >---------------------------------
@@ -373,15 +487,16 @@ def p_empty(p):
     ''' empty :	'''
     pass
 
+
 # THROWING ERROR
 def p_error(p):
     print("\tSyntax error in line " + str(p.lineno))
 
 
 parser = yacc.yacc()
-#f = open("codigoIntermedio2.txt", "r")
-#f = open("RAICES", "r")
-#f = open("DIGITS.txt", "r")
-f = open("recursion.txt", "r")
+# f = open("codigoIntermedio2.txt", "r")
+#f = open("recursion.txt", "r")
+f = open("DIGITS", "r")
 parser.parse(f.read())
-
+#print(symbols)
+#print(program_instructions)

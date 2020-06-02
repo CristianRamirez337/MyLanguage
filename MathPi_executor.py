@@ -1,28 +1,30 @@
 from MathPi import program_instructions, symbols
 import re
 from collections import deque
+
 # ---------------------------< QUADRUPLE MANAGEMENT >---------------------------
 
-availValues = {}
+avail_values = {}
 operator = re.compile("\+|-|\*|\/")
 comparator = re.compile(">|<|={2}?|!=|(AND){1}?|(OR){1}?")
+sized_variables = []
 
 
 # +++++++++++++++ / Comparation \ +++++++++++++++
 def comparation(operation, operation_type):
     type = "BOOL"
     if operation[0] == '>':
-        availValues[operation[3]] = [operation[1] > operation[2], type]
+        avail_values[operation[3]] = [operation[1] > operation[2], type]
     elif operation[0] == '<':
-        availValues[operation[3]] = [operation[1] < operation[2], type]
+        avail_values[operation[3]] = [operation[1] < operation[2], type]
     elif operation[0] == '==':
-        availValues[operation[3]] = [operation[1] == operation[2], type]
+        avail_values[operation[3]] = [operation[1] == operation[2], type]
     elif operation[0] == 'OR':
-        availValues[operation[3]] = [operation[1] or operation[2], type]
+        avail_values[operation[3]] = [operation[1] or operation[2], type]
     elif operation[0] == 'AND':
-        availValues[operation[3]] = [operation[1] and operation[2], type]
+        avail_values[operation[3]] = [operation[1] and operation[2], type]
     else:
-        availValues[operation[3]] = [operation[1] != operation[2], type]
+        avail_values[operation[3]] = [operation[1] != operation[2], type]
 
 
 # +++++++++++++++ / Sum, Substraction, Multiplication, Division \ +++++++++++++++
@@ -30,24 +32,24 @@ def ssmd(operation, operation_type):
     type = translate_type(operation_type)
     if operation[0] == '+':
         if type == 'INT':
-            availValues[operation[3]] = [int(operation[1] + operation[2]), type]
+            avail_values[operation[3]] = [int(operation[1] + operation[2]), type]
         else:
-            availValues[operation[3]] = [float("{:.2f}".format(operation[1] + operation[2])), type]
+            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] + operation[2])), type]
     elif operation[0] == '-':
         if type == 'INT':
-            availValues[operation[3]] = [int(operation[1] - operation[2]), type]
+            avail_values[operation[3]] = [int(operation[1] - operation[2]), type]
         else:
-            availValues[operation[3]] = [float("{:.2f}".format(operation[1] - operation[2])), type]
+            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] - operation[2])), type]
     elif operation[0] == '*':
         if type == 'INT':
-            availValues[operation[3]] = [int(operation[1] * operation[2]), type]
+            avail_values[operation[3]] = [int(operation[1] * operation[2]), type]
         else:
-            availValues[operation[3]] = [float("{:.2f}".format(operation[1] * operation[2])), type]
+            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] * operation[2])), type]
     else:
         if type == 'INT':
-            availValues[operation[3]] = [int(operation[1] / operation[2]), type]
+            avail_values[operation[3]] = [int(operation[1] / operation[2]), type]
         else:
-            availValues[operation[3]] = [float("{:.2f}".format(operation[1] / operation[2])), type]
+            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] / operation[2])), type]
 
 
 # +++++++++++++++++++++/ Type Translation \++++++++++++++++++++++
@@ -63,20 +65,26 @@ def translate_type(operation_type):
         return 'FLOAT'
 
 
-
 # +++++++++++++++ / Does it have a value? \ +++++++++++++++
 # +++++++++++++++ / Operation Formation \ +++++++++++++++
 def hasValue(operand, operation, operation_type):
-
     if isinstance(operand, str) and operand[0] == '-':
-        if symbols[operand[1:]][0] == "NULL":
+        if not ('[' in operand) and symbols[operand[1:]][0] == "NULL":
             return False
         else:
-            operation.append(symbols[operand[1:]][0])
-            operation_type.append(symbols[operand[1:]][1])
+            if operand.find('[') != -1:
+                # Getting value from the memory array
+                operation.append(sized_variables[sized_variables_manipulation(operand)])
+                if 'INT' in symbols[operand[1:operand.find('[')]][1]:
+                    operation_type.append('INT')
+                else:
+                    operation_type.append('FLOAT')
+            else:
+                operation.append(symbols[operand[1:]][0])
+                operation_type.append(symbols[operand[1:]][1])
     elif isinstance(operand, str):
-        operation.append(availValues[operand][0])
-        operation_type.append(availValues[operand][1])
+        operation.append(avail_values[operand][0])
+        operation_type.append(avail_values[operand][1])
     else:
         operation.append(operand)
         if isinstance(operand, int):
@@ -87,6 +95,28 @@ def hasValue(operand, operation, operation_type):
 
 
 # +++++++++++++++ / Classification  of operation \ +++++++++++++++
+def sized_variables_manipulation(operand):
+    operand_sized = operand[operand.find('[') + 1: operand.find(']')].split(',')
+    if operand_sized[0] in symbols.keys():
+        operand_sized[0] = symbols[operand_sized[0]][0]
+    if len(operand_sized) == 1:
+        return int(operand_sized[0]) + int(symbols[operand[1:operand.find('[')]][0])
+    elif len(operand_sized) == 2:
+        if operand_sized[1] in symbols.keys():
+            operand_sized[1] = symbols[operand_sized[1]][0]
+        return int(operand_sized[0]) * int(symbols[operand[1:operand.find('[')]][2][1]) + int(
+            operand_sized[1]) + int(symbols[operand[1:operand.find('[')]][0])
+    else:
+        if operand_sized[1] in symbols.keys():
+            operand_sized[1] = symbols[operand_sized[1]][0]
+        elif operand_sized[2] in symbols.keys():
+            operand_sized[2] = symbols[operand_sized[2]][0]
+        return int(operand_sized[0]) * int(symbols[operand[1:operand.find('[')]][2][2]) * \
+               int(symbols[operand[1:operand.find('[')]][2][1]) + int(operand_sized[1]) \
+               + int(operand_sized[1]) * int(symbols[operand[1:operand.find('[')]][2][2]) \
+               + int(operand_sized[2]) + int(symbols[operand[1:operand.find('[')]][0])
+
+
 def manageQuadruples(q):
     value = True
     operation = []
@@ -115,11 +145,21 @@ def manageQuadruples(q):
         operation_type.clear()
 
     else:  # Assign section
+
         operation.append(q[0])
         value = hasValue(q[2], operation, operation_type)
         operation.insert(1, q[1])
         if value:
-            symbols[operation[1][1:]][0] = operation[2]
+            if '[' in str(operation[1]) and '[' in str(operation[2]):
+                sized_variables[sized_variables_manipulation(operation[1])] = sized_variables[
+                    sized_variables_manipulation(operation[2])]
+            elif '[' in str(operation[1]) and not ('[' in str(operation[2])):
+                sized_variables[sized_variables_manipulation(operation[1])] = operation[2]
+            else:
+                if '[' in str(operation[2]):
+                    symbols[operation[1][1:]][0] = sized_variables[sized_variables_manipulation(operation[2])]
+                else:
+                    symbols[operation[1][1:]][0] = operation[2]
         operation.clear()
         operation_type.clear()
     return not value
@@ -136,6 +176,7 @@ def inputExecution(q):
     elif symbols[q][1] == 'FLOAT':
         symbols[q][0] = float(input())
 
+
 # ---------------------------< END OF READ EXECUTION >---------------------------
 
 
@@ -147,23 +188,39 @@ def printExecution(q):
     except:
         print(q)
 
+
 # ---------------------------< END OF PRINT EXECUTION >---------------------------
 
 def main():
     error = False
     program_counter = 0
     aux_back_procedure = []
+    base = 0
 
     print(program_instructions)
+    for i in symbols:
+        if 'ARRAY' in symbols[i][1]:
+            symbols[i][0] = base
+            base += symbols[i][2] + 1
+        elif 'MATRIX' in symbols[i][1]:
+            symbols[i][0] = base
+            base += (symbols[i][2][0] + 1) * (symbols[i][2][1] + 1)
+        elif 'CUBE' in symbols[i][1]:
+            symbols[i][0] = base
+            base += (symbols[i][2][0]+ 1 ) * (symbols[i][2][1] + 1) * (symbols[i][2][2] + 1)
+
+    global sized_variables
+    sized_variables = [0] * base
 
     while program_counter < len(program_instructions) and not error:
-        if program_instructions[program_counter][0:4] == "Goto" and program_instructions[program_counter][0:5] != "GotoF":
+        if program_instructions[program_counter][0:4] == "Goto" and program_instructions[program_counter][
+                                                                    0:5] != "GotoF":
             program_counter = int(program_instructions[program_counter][5:])
         elif program_instructions[program_counter][0:5] == "GotoF":
             aux = program_instructions[program_counter].find('~')
             aux2 = program_instructions[program_counter].find(' ')
-            if not availValues[program_instructions[program_counter][aux + 1 : aux2]][0]:
-                program_counter = int(program_instructions[program_counter][aux2+1:])
+            if not avail_values[program_instructions[program_counter][aux + 1: aux2]][0]:
+                program_counter = int(program_instructions[program_counter][aux2 + 1:])
             else:
                 program_counter += 1
             pass
@@ -171,7 +228,7 @@ def main():
             aux_back_procedure.append(program_counter)
             program_counter = symbols[program_instructions[program_counter][6:]][0]
         elif program_instructions[program_counter] == 'END PROCEDURE':
-            program_counter = aux_back_procedure.pop() + 1 # HAcerlo como lo tenia pero en vez de fila con stacks
+            program_counter = aux_back_procedure.pop() + 1  # HAcerlo como lo tenia pero en vez de fila con stacks
         elif program_instructions[program_counter][0:5] == "INPUT":
             inputExecution(program_instructions[program_counter][6:])
             program_counter += 1
@@ -183,6 +240,7 @@ def main():
             program_counter += 1
 
     print(symbols)
+    print(sized_variables)
     if error:
         print("ERROR: VARIABLE HAS NOT BEEN INITIALIZED")
 

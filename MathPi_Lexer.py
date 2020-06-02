@@ -12,8 +12,9 @@ tokens = [
 reserved = ['PROGRAM', 'END', 'VAR', 'PROCEDURE',
             'BEGIN', 'PRINT', 'INPUT', 'IF', 'ELSE', 'ENDIF',
             'WHILE', 'ENDW', 'DO', 'ENDDO', 'FOR', 'ENDF',
-            'GOSUB', 'ENDP', 'FLOAT', 'INT', 'ARRAY', 'MATRIX',
-            'CUBE', 'IN', 'DWHILE', 'AND', 'OR', 'BOOL'
+            'GOSUB', 'ENDP', 'FLOAT', 'INT', 'ARRAY_INT', 'ARRAY_FLOAT',
+            'MATRIX_INT', 'MATRIX_FLOAT', 'CUBE_INT', 'CUBE_FLOAT',
+            'IN', 'DWHILE', 'AND', 'OR', 'BOOL'
             ]
 
 tokens = tokens + reserved
