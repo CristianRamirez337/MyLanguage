@@ -247,7 +247,7 @@ def main():
             program_counter += 1
 
     #print(symbols)
-    print(sized_variables)
+    #print(sized_variables)
     if error:
         print("ERROR: VARIABLE HAS NOT BEEN INITIALIZED")
 
