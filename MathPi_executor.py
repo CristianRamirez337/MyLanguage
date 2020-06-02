@@ -185,6 +185,10 @@ def inputExecution(q):
 def printExecution(q):
     try:
         print(symbols[q][0])
+        # to_print = ''
+        # for i in q:
+        #     to_print = to_print + ' ' + str(symbols[i][0])
+        # print(to_print)
     except:
         print(q)
 
@@ -197,22 +201,25 @@ def main():
     aux_back_procedure = []
     base = 0
 
-    print(program_instructions)
+    program_counter_register = []
+
+    #print(program_instructions)
     for i in symbols:
         if 'ARRAY' in symbols[i][1]:
             symbols[i][0] = base
-            base += symbols[i][2] + 1
+            base += symbols[i][2]
         elif 'MATRIX' in symbols[i][1]:
             symbols[i][0] = base
-            base += (symbols[i][2][0] + 1) * (symbols[i][2][1] + 1)
+            base += (symbols[i][2][0]) * (symbols[i][2][1])
         elif 'CUBE' in symbols[i][1]:
             symbols[i][0] = base
-            base += (symbols[i][2][0]+ 1 ) * (symbols[i][2][1] + 1) * (symbols[i][2][2] + 1)
+            base += (symbols[i][2][0]) * (symbols[i][2][1]) * (symbols[i][2][2])
 
     global sized_variables
     sized_variables = [0] * base
 
     while program_counter < len(program_instructions) and not error:
+        program_counter_register.append(program_counter)
         if program_instructions[program_counter][0:4] == "Goto" and program_instructions[program_counter][
                                                                     0:5] != "GotoF":
             program_counter = int(program_instructions[program_counter][5:])
@@ -239,7 +246,7 @@ def main():
             error = manageQuadruples(program_instructions[program_counter])
             program_counter += 1
 
-    print(symbols)
+    #print(symbols)
     print(sized_variables)
     if error:
         print("ERROR: VARIABLE HAS NOT BEEN INITIALIZED")

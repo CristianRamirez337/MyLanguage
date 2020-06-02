@@ -161,14 +161,19 @@ def p_S_GOSUB(p):
 
 # +++++++++++++++ / PRINT MANAGEMENT \ +++++++++++++++
 stringsL = ''
+string_id = []
 
 
 def p_S_PRINT(p):
     '''S : PRINT PARL SID PARR'''
     global program_counter, stringsL
+    # if stringsL:
     program_instructions.append(['PRINT', stringsL])
-    program_counter += 1
     stringsL = ''
+    # else:
+    #     program_instructions.append(['PRINT', string_id])
+    program_counter += 1
+
 
 
 def p_SID(p):
@@ -185,6 +190,10 @@ def p_SID_T(p):
     global stringsL
     stringsL = stringsL + str(p[1])
 
+
+# def p_SID_T_id(p):
+#     '''SID_T : ID'''
+#     string_id.append(p[1])
 
 def p_SID2_empty(p):
     '''SID : empty'''
@@ -496,7 +505,7 @@ def p_error(p):
 parser = yacc.yacc()
 # f = open("codigoIntermedio2.txt", "r")
 #f = open("recursion.txt", "r")
-f = open("DIGITS", "r")
+f = open("suma_multiplicacion_mat", "r")
 parser.parse(f.read())
 #print(symbols)
 #print(program_instructions)

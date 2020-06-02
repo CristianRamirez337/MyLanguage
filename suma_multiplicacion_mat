@@ -1,0 +1,167 @@
+program:
+
+    var x[5,5], y[5,5], z[5,5]: matrix_int
+    var m1f, m1c, m2f, m2c, option, fila, columna, inputval, filaR, columnaR, sumaM: int
+
+    procedure input_values:
+        begin:
+            print("Ingrese las dimensiones de las dos matrices")
+            print("Fila y columna de matriz A")
+            input(m1f)
+            input(m1c)
+            print("Fila y columna de matriz B")
+            input(m2f)
+            input(m2c)
+
+            while (m1f > 5) or (m1c > 5) or (m2f > 5) or (m2c > 5):
+                print("Las dimensiones maximas son de 5 x 5")
+                print("Fila y columna de matriz A")
+                input(m1f)
+                input(m1c)
+                print("Fila y columna de matriz B")
+                input(m2f)
+                input(m2c)
+            endw
+    endp
+
+    procedure ingrese_valores_A:
+        begin:
+            print("ingrese los valores por filas")
+            fila = 0
+            columna = 0
+            while fila < m1f:
+                columna = 0
+                while columna < m1c:
+                    input(inputval)
+                    x[fila, columna] = inputval
+                    columna = columna + 1
+                endw
+                fila = fila + 1
+            endw
+    endp
+
+    procedure ingrese_valores_B:
+        begin:
+            print("ingrese los valores por filas")
+            fila = 0
+            columna = 0
+            while fila < m2f:
+                columna = 0
+                while columna < m2c:
+                    input(inputval)
+                    y[fila, columna] = inputval
+                    columna = columna + 1
+                endw
+                fila = fila + 1
+            endw
+    endp
+
+
+    procedure suma:
+        begin:
+            fila = 0
+            columna = 0
+            while fila <  m1f:
+                columna = 0
+                while columna < m1c:
+                    z[fila, columna] = x[fila, columna] + y[fila, columna]
+                    columna = columna + 1
+                endw
+                fila = fila + 1
+            endw
+    endp
+
+    procedure printResultSuma:
+        begin:
+            fila = 0
+            columna = 0
+            while fila <  m1f:
+                columna = 0
+                print("Fila")
+                while columna < m1c:
+                    inputval = z[fila, columna]
+                    columna = columna + 1
+                    print(inputval)
+                endw
+                fila = fila + 1
+            endw
+    endp
+
+    procedure multiplicacion:
+        begin:
+            print("Multiplicacion")
+            fila = 0
+            filaR = 0
+            columna = 0
+            columnaR = 0
+
+            while (columnaR <  m2c):
+                while fila < m1f:
+                    columna = 0
+                    sumaM = 0
+                    while columna < m1c:
+                        sumaM = sumaM + (x[fila, columna] * y[columna, columnaR])
+                        columna = columna + 1
+                    endw
+                    z[fila, columnaR] = sumaM
+                    fila = fila + 1
+                endw
+                columnaR = columnaR + 1
+                fila = 0
+            endw
+    endp
+
+    procedure printResultMultiplicacion:
+        begin:
+            fila = 0
+            columna = 0
+            while fila <  m1f:
+                columna = 0
+                print("Fila")
+                while columna < m2c:
+                    inputval = z[fila, columna]
+                    columna = columna + 1
+                    print(inputval)
+                endw
+                fila = fila + 1
+            endw
+    endp
+
+    begin:
+
+        GOSUB input_values
+
+        print("Seleccione la opcion que desea:")
+        print("1  Multiplicar dos matrices")
+        print("2  Sumar dos matrices")
+        input(option)
+
+        if (option == 1) and  (m1c != m2f):
+            print("Las dimensiones son incorrectas para una multiplicacion")
+        else:
+            if (option == 1) and  (m1c == m2f):
+                print("Matriz A")
+                GOSUB ingrese_valores_A
+                print("Matriz B")
+                GOSUB ingrese_valores_B
+                gosub multiplicacion
+                gosub printResultMultiplicacion
+            endif
+        endif
+
+        if (option == 2) and  ((m1c != m2c) or (m1f != m2f)):
+            print("Las dimensiones son incorrectas para una multiplicacion")
+        else:
+            if (option == 2):
+
+                print("Matriz A")
+                GOSUB ingrese_valores_A
+                print("Matriz B")
+                GOSUB ingrese_valores_B
+                GOSUB suma
+                GOSUB printResultSuma
+            endif
+        endif
+
+
+end
