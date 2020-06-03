@@ -1,0 +1,44 @@
+program:
+
+    var X, Y, result, option: int
+
+    procedure
+
+    procedure inputXY:
+        begin:
+            print("Ingrese X")
+            input(X)
+            print("Ingrese Y")
+            input(Y)
+
+            print("Que operacion desea realizar")
+            pirnt("1 Factorial     2 X exponencial Y    3 X mas Y por ciento")
+            input(option)
+
+            if option == 1:
+                gosub factorial
+            endif
+            if option == 2
+                gosub exponencial
+            endif
+            if option == 3
+                gosub porciento
+            endif
+    endp
+
+    begin:
+
+        gosub inputXY
+
+        print("Desea realizar otra operacion")
+        print("1 si")
+        print("2 no")
+        input(option)
+
+        while option != 2:
+            gosub inputXY
+        endw
+
+
+        print("Gracias por usar este programa")
+end
