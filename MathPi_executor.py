@@ -97,7 +97,7 @@ def hasValue(operand, operation, operation_type):
 # +++++++++++++++ / Classification  of operation \ +++++++++++++++
 def sized_variables_manipulation(operand):
     operand_sized = operand[operand.find('[') + 1: operand.find(']')].split(',')
-    if operand_sized[0] in symbols.keys():
+    if str(operand_sized[0]) in symbols.keys():
         operand_sized[0] = symbols[operand_sized[0]][0]
     if len(operand_sized) == 1:
         return int(operand_sized[0]) + int(symbols[operand[1:operand.find('[')]][0])

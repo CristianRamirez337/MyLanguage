@@ -1,0 +1,82 @@
+program:
+
+    var x[10]: array_int
+    var n, iterator, inputValue, j, n2, aux, choice: int
+
+
+    procedure input_vector:
+        begin:
+            print("Ingrese los valores del vector a ordenar")
+            iterator = 0
+
+            while iterator <  n:
+                input(inputValue)
+                x[iterator] = inputValue
+                iterator = iterator + 1
+            endw
+    endp
+
+    procedure sorting:
+        begin:
+            iterator = 0
+            n2 = n - 1
+            while iterator < n2:
+                j = iterator + 1
+                while j < n:
+                    if x[iterator] < x[j]:
+                        aux = x[iterator]
+                        x[iterator] = x[j]
+                        x[j] = aux
+                    endif
+                    j = j + 1
+                endw
+
+                iterator = iterator + 1
+            endw
+    endp
+
+    procedure printResult:
+        begin:
+            iterator = 0
+            print("Vector sorted")
+            while iterator <  n:
+                    inputValue = x[iterator]
+                    print(inputValue)
+                    iterator = iterator + 1
+            endw
+    endp
+
+    begin:
+
+        print("Ingrese la dimension del vector, maximo 10")
+        input(n)
+
+        GOSUB input_vector
+
+        GOSUB sorting
+
+        GOSUB printResult
+
+        print("Desea ordenar otro vector")
+        print("1 si")
+        print("2 no")
+        input(choice)
+
+        while choice != 2:
+            print("Ingrese la dimension del vector, maximo 10")
+            input(n)
+
+            GOSUB input_vector
+
+            GOSUB sorting
+
+            GOSUB printResult
+
+            print("Desea ordenar otro vector")
+            print("1 si")
+            print("2 no")
+            input(choice)
+        endw
+
+        print("Gracias por usar este programa")
+end
