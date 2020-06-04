@@ -19,6 +19,27 @@ program:
             endw
     endp
 
+    procedure exp:
+        begin:
+        print("exponencial")
+        resultado = 1
+        n = 1
+        while n < (terminos + 1):
+
+            aux = 2
+            resultFac = 1
+            gosub factorial
+
+            aux = 0
+            resultExp = 1
+            gosub exponencial
+
+            resultado = resultado + (resultExp / resultFac)
+
+            n = n + 1
+        endw
+    endp
+
     procedure seno:
         begin:
         print("seno")
@@ -105,6 +126,15 @@ program:
             input(terminos)
 
             gosub coseno
+            print(resultado)
+        endif
+
+        if option == 3:
+
+            print("Cuantos terminos desea realizar para la serie de Maclaurin")
+            input(terminos)
+
+            gosub exp
             print(resultado)
         endif
 end
