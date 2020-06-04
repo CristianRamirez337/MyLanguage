@@ -1,0 +1,110 @@
+program:
+    var terminos, option, n, signo, residuoS, X, Y, aux, resultExp, residuo: int
+    var resultado, resultFac: float
+
+    procedure factorial:
+        begin:
+            if aux < (n + 1):
+                resultFac = resultFac*aux
+                aux = aux + 1
+                gosub factorial
+            endif
+    endp
+
+    procedure exponencial:
+        begin:
+            while aux < n:
+                resultExp = resultExp * X
+                aux = aux + 1
+            endw
+    endp
+
+    procedure seno:
+        begin:
+        print("seno")
+        signo = 0
+        resultado = 0
+        n = 1
+        while n < (terminos + 1):
+
+            residuo = signo - 2*(signo/2)
+
+            aux = 2
+            resultFac = 1
+            gosub factorial
+
+            aux = 0
+            resultExp = 1
+            gosub exponencial
+
+
+            if residuo == 1:
+                resultado = resultado - (resultExp / resultFac)
+            else:
+                resultado = resultado + (resultExp / resultFac)
+            endif
+
+            signo = signo + 1
+
+            n = n + 2
+        endw
+    endp
+
+    procedure coseno:
+        begin:
+        print("coseno")
+        signo = 1
+        resultado = 1
+        n = 2
+        while n < (terminos + 1):
+
+            residuo = signo - 2*(signo/2)
+
+            aux = 2
+            resultFac = 1
+            gosub factorial
+
+            aux = 0
+            resultExp = 1
+            gosub exponencial
+
+
+            if residuo == 1:
+                resultado = resultado - (resultExp / resultFac)
+            else:
+                resultado = resultado + (resultExp / resultFac)
+            endif
+
+            signo = signo + 1
+
+            n = n + 2
+        endw
+    endp
+
+
+    begin:
+        print("Que operacion desea realizar")
+        print("1 seno     2 coseno    3 exponencial")
+        input(option)
+
+        print("Ingrese el valor a calcular")
+        input(X)
+
+        if option == 1:
+
+            print("Cuantos terminos desea realizar para la serie de Maclaurin")
+            input(terminos)
+
+            gosub seno
+            print(resultado)
+        endif
+
+        if option == 2:
+
+            print("Cuantos terminos desea realizar para la serie de Maclaurin")
+            input(terminos)
+
+            gosub coseno
+            print(resultado)
+        endif
+end

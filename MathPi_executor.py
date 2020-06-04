@@ -34,22 +34,22 @@ def ssmd(operation, operation_type):
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] + operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] + operation[2])), type]
+            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] + operation[2])), type]
     elif operation[0] == '-':
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] - operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] - operation[2])), type]
+            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] - operation[2])), type]
     elif operation[0] == '*':
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] * operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] * operation[2])), type]
+            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] * operation[2])), type]
     else:
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] / operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.2f}".format(operation[1] / operation[2])), type]
+            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] / operation[2])), type]
 
 
 # +++++++++++++++++++++/ Type Translation \++++++++++++++++++++++
