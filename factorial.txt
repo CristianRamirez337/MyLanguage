@@ -1,29 +1,72 @@
 program:
 
-    var X, Y, result, option: int
+    var X, Y, result, option, aux: int
 
-    procedure
+    procedure factorial:
+        begin:
+            if aux < (X + 1):
+                result = result*aux
+                aux = aux + 1
+                gosub factorial
+            endif
+    endp
+
+    procedure exponencial:
+        begin:
+            while aux < Y:
+                result = result * X
+                aux = aux + 1
+            endw
+    endp
+
+    procedure porciento:
+        begin:
+            result = X + X * Y * 0.01
+    endp
 
     procedure inputXY:
         begin:
-            print("Ingrese X")
-            input(X)
-            print("Ingrese Y")
-            input(Y)
-
             print("Que operacion desea realizar")
-            pirnt("1 Factorial     2 X exponencial Y    3 X mas Y por ciento")
+            print("1 Factorial     2 X exponencial Y    3 X mas Y por ciento")
             input(option)
 
             if option == 1:
+                print("Ingrese X")
+                input(X)
+
+                aux = 2
+                result = 1
                 gosub factorial
+                print("Factorial is: ")
+                print(result)
             endif
-            if option == 2
+
+            if option == 2:
+                 print("Ingrese X")
+                input(X)
+                print("Ingrese Y")
+                input(Y)
+
+                aux = 0
+                result = 1
                 gosub exponencial
+                print("X to the Y: ")
+                print(result)
             endif
-            if option == 3
+
+            if option == 3:
+                 print("Ingrese X")
+                input(X)
+                print("Ingrese Y")
+                input(Y)
                 gosub porciento
+                print("X mas X por ciento:")
+                print(result)
             endif
+
+
+
+
     endp
 
     begin:
@@ -37,6 +80,10 @@ program:
 
         while option != 2:
             gosub inputXY
+            print("Desea realizar otra operacion")
+            print("1 si")
+            print("2 no")
+            input(option)
         endw
 
 
