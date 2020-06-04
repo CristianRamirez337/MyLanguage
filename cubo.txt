@@ -1,0 +1,15 @@
+program:
+    var cubo[2,2,2]: cube_int
+
+    var result, index: int
+
+    begin:
+        index = 1
+        cubo[0,0,0] = 2
+        cubo[0,1,0] = 3
+
+        cubo[1,0,0] = cubo[0,0,0] - cubo[0,1,0]
+        result = cubo[1,0,0]
+        print(result)
+
+end

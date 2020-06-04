@@ -34,22 +34,22 @@ def ssmd(operation, operation_type):
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] + operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] + operation[2])), type]
+            avail_values[operation[3]] = [float("{:.6f}".format(operation[1] + operation[2])), type]
     elif operation[0] == '-':
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] - operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] - operation[2])), type]
+            avail_values[operation[3]] = [float("{:.6f}".format(operation[1] - operation[2])), type]
     elif operation[0] == '*':
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] * operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] * operation[2])), type]
+            avail_values[operation[3]] = [float("{:.6f}".format(operation[1] * operation[2])), type]
     else:
         if type == 'INT':
             avail_values[operation[3]] = [int(operation[1] / operation[2]), type]
         else:
-            avail_values[operation[3]] = [float("{:.4f}".format(operation[1] / operation[2])), type]
+            avail_values[operation[3]] = [float("{:.6f}".format(operation[1] / operation[2])), type]
 
 
 # +++++++++++++++++++++/ Type Translation \++++++++++++++++++++++
@@ -203,7 +203,7 @@ def main():
 
     program_counter_register = []
 
-    #print(program_instructions)
+    print(program_instructions)
     for i in symbols:
         if 'ARRAY' in symbols[i][1]:
             symbols[i][0] = base
@@ -246,7 +246,7 @@ def main():
             error = manageQuadruples(program_instructions[program_counter])
             program_counter += 1
 
-    #print(symbols)
+    print(symbols)
     #print(sized_variables)
     if error:
         print("ERROR: VARIABLE HAS NOT BEEN INITIALIZED")

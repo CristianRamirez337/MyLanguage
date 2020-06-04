@@ -505,11 +505,13 @@ def p_error(p):
 parser = yacc.yacc()
 # f = open("codigoIntermedio2.txt", "r")
 #f = open("recursion.txt", "r")
+
 #f = open("suma_multiplicacion_mat", "r")
 #f = open("sort_vector.txt", "r")
 #f = open("factorial.txt", "r")
 #f = open("DIGITS.txt", "r")
-f = open("Maclaurin.txt", "r")
+#f = open("RAICES", "r")
+f = open("cubo.txt", "r")
 
 parser.parse(f.read())
 #print(symbols)
